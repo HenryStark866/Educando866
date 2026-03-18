@@ -89,31 +89,44 @@
                 </div>
                 <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Material PDF</h3>
             </div>
+            <p class="text-sm text-gray-600">Los PDF se cargan desde archivos locales del curso para mejorar compatibilidad. Si tu navegador no permite vista embebida, usa "Abrir PDF".</p>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden" data-material-title="Guia de practica 1">
                     <div class="p-4 border-b border-gray-100 flex items-center justify-between gap-4">
                         <div>
                             <h4 class="font-bold text-gray-900">Guia de practica 1</h4>
-                            <p class="text-sm text-gray-500">PDF en visor embebido</p>
+                            <p class="text-sm text-gray-500">PDF local embebido</p>
                         </div>
-                        <a class="text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" target="_blank" rel="noopener noreferrer">Abrir aparte</a>
+                        <a class="js-pdf-open text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="assets/pdfs/guia-practica-1.pdf" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
                     </div>
                     <div class="h-[450px] bg-gray-100">
-                        <iframe class="w-full h-full" src="https://docs.google.com/gview?embedded=1&url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" title="PDF Guia 1" loading="lazy"></iframe>
+                        <object class="w-full h-full" data="assets/pdfs/guia-practica-1.pdf#view=FitH" type="application/pdf">
+                            <iframe class="w-full h-full" src="assets/pdfs/guia-practica-1.pdf#view=FitH" title="PDF Guia 1" loading="lazy"></iframe>
+                        </object>
+                    </div>
+                    <div class="px-4 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-600 flex items-center justify-between">
+                        <span>Si no se visualiza en tu navegador, abre el archivo en una pestaña nueva.</span>
+                        <a class="js-pdf-open text-emerald-700 font-semibold" href="assets/pdfs/guia-practica-1.pdf" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
                     </div>
                 </article>
 
-                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden" data-material-title="Guia de practica 2">
                     <div class="p-4 border-b border-gray-100 flex items-center justify-between gap-4">
                         <div>
                             <h4 class="font-bold text-gray-900">Guia de practica 2</h4>
-                            <p class="text-sm text-gray-500">PDF en visor embebido</p>
+                            <p class="text-sm text-gray-500">PDF local embebido</p>
                         </div>
-                        <a class="text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="https://www.orimi.com/pdf-test.pdf" target="_blank" rel="noopener noreferrer">Abrir aparte</a>
+                        <a class="js-pdf-open text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="assets/pdfs/guia-practica-2.pdf" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
                     </div>
                     <div class="h-[450px] bg-gray-100">
-                        <iframe class="w-full h-full" src="https://docs.google.com/gview?embedded=1&url=https://www.orimi.com/pdf-test.pdf" title="PDF Guia 2" loading="lazy"></iframe>
+                        <object class="w-full h-full" data="assets/pdfs/guia-practica-2.pdf#view=FitH" type="application/pdf">
+                            <iframe class="w-full h-full" src="assets/pdfs/guia-practica-2.pdf#view=FitH" title="PDF Guia 2" loading="lazy"></iframe>
+                        </object>
+                    </div>
+                    <div class="px-4 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-600 flex items-center justify-between">
+                        <span>Si no se visualiza en tu navegador, abre el archivo en una pestaña nueva.</span>
+                        <a class="js-pdf-open text-emerald-700 font-semibold" href="assets/pdfs/guia-practica-2.pdf" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
                     </div>
                 </article>
             </div>
@@ -132,6 +145,18 @@
         const welcomeText = document.getElementById('welcome-text');
         welcomeText.textContent = `${studentName} ${studentEmail ? `(${studentEmail})` : ''}`;
 
+        const pdfLinks = document.querySelectorAll('.js-pdf-open');
+        pdfLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                window.dispatchEvent(new CustomEvent('vetprep:pdf_open', {
+                    detail: {
+                        title: link.closest('[data-material-title]')?.getAttribute('data-material-title') || 'Material PDF',
+                        href: link.getAttribute('href')
+                    }
+                }));
+            });
+        });
+
         document.getElementById('logout-btn').addEventListener('click', () => {
             localStorage.removeItem('vetprep_student_logged_in');
             localStorage.removeItem('vetprep_student_name');
@@ -139,5 +164,6 @@
             window.location.replace('index.html');
         });
     </script>
+    <script type="module" src="./course-analytics.js"></script>
 </body>
 </html>

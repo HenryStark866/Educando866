@@ -2,6 +2,8 @@
 import { db } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
+const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
+
 /**
  * Guarda los resultados del taller en Firestore de forma automática.
  * @param {string} workshopType - 'Logica' o 'Lectura'
@@ -33,13 +35,17 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
     
     // Almacenamiento del documento
     const workshopData = {
-        studentName: studentName,
-        studentEmail: studentEmail,
+        student: {
+            name: studentName,
+            email: studentEmail
+        },
         workshopType: workshopType,
-        rawScore: rawScore,
-        totalQuestions: totalQuestions,
-        finalScore: parseFloat(finalScore),
-        timestamp: serverTimestamp(),
+        score: {
+            raw: rawScore,
+            totalQuestions: totalQuestions,
+            final: parseFloat(finalScore)
+        },
+        createdAt: serverTimestamp(),
         deviceUserAgent: navigator.userAgent
     };
 
@@ -61,7 +67,7 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
         localStorage.setItem(`backup_score_${workshopType}_${Date.now()}`, JSON.stringify(workshopData));
     }
 
-    // Enviar correo automáticamente a cdhmaker@gmail.com usando FormSubmit (Fetch API)
+    // Enviar correo automáticamente al administrador usando FormSubmit (Fetch API)
     try {
         const emailMessage = `
 Estudiante: ${studentName}
@@ -72,7 +78,7 @@ Aciertos: ${rawScore}/${totalQuestions}
 Firebase ID: ${docId}
         `.trim();
 
-        await fetch("https://formsubmit.co/ajax/cdhmaker@gmail.com", {
+        await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
             method: "POST",
             headers: { 
                 'Content-Type': 'application/json',
