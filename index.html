@@ -368,6 +368,9 @@
             </div>
             <div class="p-8">
                 <form id="student-login-form" autocomplete="on" class="space-y-5">
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+                        <p class="text-xs font-semibold text-emerald-800">Becados VetPrep: puedes ingresar con cédula + código de acceso.</p>
+                    </div>
                     <div>
                         <label for="student-name" class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre</label>
                         <input type="text" id="student-name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-colors text-gray-800 font-medium placeholder-gray-400 outline-none" placeholder="Tu nombre completo" required>
@@ -376,6 +379,17 @@
                         <label for="student-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Correo</label>
                         <input type="email" id="student-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-colors text-gray-800 font-medium placeholder-gray-400 outline-none" placeholder="tucorreo@ejemplo.com" required>
                     </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="student-id" class="block text-sm font-semibold text-gray-700 mb-1.5">Cédula (opcional)</label>
+                            <input type="text" id="student-id" inputmode="numeric" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-colors text-gray-800 font-medium placeholder-gray-400 outline-none" placeholder="1032097855">
+                        </div>
+                        <div>
+                            <label for="student-access-code" class="block text-sm font-semibold text-gray-700 mb-1.5">Código becado (opcional)</label>
+                            <input type="text" id="student-access-code" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-colors text-gray-800 font-medium placeholder-gray-400 outline-none" placeholder="BEC-0001-NGA">
+                        </div>
+                    </div>
+                    <p id="student-login-error" class="hidden text-sm text-red-600 font-medium">Credenciales de becado inválidas. Verifica cédula y código.</p>
                     <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-500/30 transition-all shadow-md">
                         Entrar al curso
                     </button>
@@ -469,7 +483,7 @@
         });
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        const appVersion = '1.1.001-IO';
+        const appVersion = '1.1.002-IO';
         const cacheKey = 'vetprep_app_version';
         const hasVersionInUrl = new URLSearchParams(window.location.search).has('v');
         if (localStorage.getItem(cacheKey) !== appVersion && !hasVersionInUrl) {
@@ -484,6 +498,18 @@
         const studentLoginBtnMobile = document.getElementById('student-login-btn-mobile');
         const closeStudentBtn = document.getElementById('close-student-btn');
         const studentLoginForm = document.getElementById('student-login-form');
+        const studentLoginError = document.getElementById('student-login-error');
+
+        const scholarshipProfiles = [
+            {
+                fullName: 'Nicolas Garzon Arteaga',
+                idNumber: '1032097855',
+                accessCode: 'BEC-0001-NGA',
+                emailAlias: 'nicolas.garzon.1032097855@vetprep-clientes.local',
+                plan: 'Becado VetPrep 2026',
+                status: 'activo'
+            }
+        ];
 
         function openStudentModal() {
             studentModal.classList.remove('hidden');
@@ -500,8 +526,32 @@
         if (studentLoginForm) {
             studentLoginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const name = document.getElementById('student-name').value.trim();
-                const email = document.getElementById('student-email').value.trim();
+                studentLoginError.classList.add('hidden');
+
+                let name = document.getElementById('student-name').value.trim();
+                let email = document.getElementById('student-email').value.trim();
+                const idNumber = document.getElementById('student-id').value.trim();
+                const accessCode = document.getElementById('student-access-code').value.trim().toUpperCase();
+
+                const usingScholarshipLogin = idNumber !== '' || accessCode !== '';
+                if (usingScholarshipLogin) {
+                    const profile = scholarshipProfiles.find((item) => item.idNumber === idNumber && item.accessCode === accessCode);
+                    if (!profile) {
+                        studentLoginError.classList.remove('hidden');
+                        return;
+                    }
+
+                    name = profile.fullName;
+                    if (!email) email = profile.emailAlias;
+                    localStorage.setItem('vetprep_student_id', profile.idNumber);
+                    localStorage.setItem('vetprep_student_access_code', profile.accessCode);
+                    localStorage.setItem('vetprep_student_role', 'becado');
+                    localStorage.setItem('vetprep_student_plan', profile.plan);
+                    localStorage.setItem('vetprep_student_status', profile.status);
+                } else {
+                    localStorage.setItem('vetprep_student_role', 'estudiante');
+                }
+
                 localStorage.setItem('vetprep_student_name', name);
                 localStorage.setItem('vetprep_student_email', email);
                 localStorage.setItem('vetprep_student_logged_in', 'true');

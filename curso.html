@@ -36,6 +36,7 @@
                 <p class="text-emerald-200 text-xs uppercase tracking-widest font-bold">Aula Virtual Premium</p>
                 <h1 class="text-xl sm:text-2xl font-bold">VetPrep UdeA</h1>
                 <p id="welcome-text" class="text-emerald-100 text-sm mt-1"></p>
+                <p id="student-badge" class="text-emerald-200 text-xs mt-1"></p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="index.html" class="px-4 py-2 rounded-full text-sm font-semibold bg-white/10 hover:bg-white/20 transition-colors">Inicio</a>
@@ -128,12 +129,18 @@
         const studentLoggedIn = localStorage.getItem('vetprep_student_logged_in') === 'true';
         const studentName = localStorage.getItem('vetprep_student_name') || 'Estudiante';
         const studentEmail = localStorage.getItem('vetprep_student_email') || '';
+        const studentRole = localStorage.getItem('vetprep_student_role') || 'estudiante';
+        const studentPlan = localStorage.getItem('vetprep_student_plan') || 'Plan general';
+        const studentId = localStorage.getItem('vetprep_student_id') || '';
 
         if (!studentLoggedIn) {
             window.location.replace('index.html');
         }
 
         document.getElementById('welcome-text').textContent = `${studentName} ${studentEmail ? `(${studentEmail})` : ''}`;
+        document.getElementById('student-badge').textContent = studentRole === 'becado'
+            ? `Perfil becado · ${studentPlan}${studentId ? ` · CC ${studentId}` : ''}`
+            : `Perfil estudiante · ${studentPlan}`;
 
         const classList = document.getElementById('class-list');
         const classCounter = document.getElementById('class-counter');
@@ -225,6 +232,11 @@
             localStorage.removeItem('vetprep_student_logged_in');
             localStorage.removeItem('vetprep_student_name');
             localStorage.removeItem('vetprep_student_email');
+            localStorage.removeItem('vetprep_student_id');
+            localStorage.removeItem('vetprep_student_access_code');
+            localStorage.removeItem('vetprep_student_role');
+            localStorage.removeItem('vetprep_student_plan');
+            localStorage.removeItem('vetprep_student_status');
             localStorage.removeItem('vetprep_current_class');
             window.location.replace('index.html');
         });
