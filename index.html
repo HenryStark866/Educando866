@@ -75,6 +75,8 @@
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="#metodologia" class="text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Metodología</a>
                     <a href="#planes" class="text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Planes</a>
+                    <a href="curso.html" class="text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Entrar al curso</a>
+                    <button id="student-login-btn" class="text-emerald-700 border border-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-2 rounded-full text-sm font-bold transition-all">Iniciar sesión</button>
                     <a href="#planes" class="bg-emerald-600 text-white hover:bg-emerald-700 px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Inscríbete Hoy</a>
                 </div>
                 <div class="md:hidden flex items-center">
@@ -88,6 +90,8 @@
             <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
                 <a href="#metodologia" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50">Metodología</a>
                 <a href="#planes" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50">Planes</a>
+                <a href="curso.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50">Entrar al curso</a>
+                <button id="student-login-btn-mobile" class="w-full mt-2 text-left px-3 py-2 rounded-md text-base font-semibold text-emerald-700 border border-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors">Iniciar sesión</button>
             </div>
         </div>
     </nav>
@@ -348,6 +352,37 @@
         </div>
     </div>
 
+    <!-- Student Login Modal -->
+    <div id="student-modal" class="fixed inset-0 z-[105] hidden bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden slide-up border border-gray-100">
+            <div class="bg-emerald-700 p-6 text-center text-white relative">
+                <button id="close-student-btn" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full hover:bg-emerald-800 text-emerald-100 hover:text-white transition-colors" aria-label="Cerrar">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+                <div class="w-16 h-16 bg-white/20 rounded-full mx-auto flex items-center justify-center mb-4 border border-white/40">
+                    <i class="fa-solid fa-user-graduate text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold tracking-tight">Ingreso al Curso</h3>
+                <p class="text-sm text-emerald-100 mt-1">Accede a videos y material PDF</p>
+            </div>
+            <div class="p-8">
+                <form id="student-login-form" autocomplete="on" class="space-y-5">
+                    <div>
+                        <label for="student-name" class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre</label>
+                        <input type="text" id="student-name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-colors text-gray-800 font-medium placeholder-gray-400 outline-none" placeholder="Tu nombre completo" required>
+                    </div>
+                    <div>
+                        <label for="student-email" class="block text-sm font-semibold text-gray-700 mb-1.5">Correo</label>
+                        <input type="email" id="student-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-colors text-gray-800 font-medium placeholder-gray-400 outline-none" placeholder="tucorreo@ejemplo.com" required>
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-xl hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-500/30 transition-all shadow-md">
+                        Entrar al curso
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Admin Dashboard (Hidden) -->
     <div id="admin-dashboard" class="fixed inset-0 z-[110] hidden bg-gray-50 overflow-y-auto">
         <nav class="bg-gray-950 text-white shadow-lg sticky top-0 z-10 border-b border-gray-900">
@@ -432,6 +467,40 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        const studentModal = document.getElementById('student-modal');
+        const studentLoginBtn = document.getElementById('student-login-btn');
+        const studentLoginBtnMobile = document.getElementById('student-login-btn-mobile');
+        const closeStudentBtn = document.getElementById('close-student-btn');
+        const studentLoginForm = document.getElementById('student-login-form');
+
+        function openStudentModal() {
+            studentModal.classList.remove('hidden');
+        }
+
+        function closeStudentModal() {
+            studentModal.classList.add('hidden');
+        }
+
+        if (studentLoginBtn) studentLoginBtn.addEventListener('click', openStudentModal);
+        if (studentLoginBtnMobile) studentLoginBtnMobile.addEventListener('click', openStudentModal);
+        if (closeStudentBtn) closeStudentBtn.addEventListener('click', closeStudentModal);
+
+        if (studentLoginForm) {
+            studentLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('student-name').value.trim();
+                const email = document.getElementById('student-email').value.trim();
+                localStorage.setItem('vetprep_student_name', name);
+                localStorage.setItem('vetprep_student_email', email);
+                localStorage.setItem('vetprep_student_logged_in', 'true');
+                window.location.href = 'curso.html';
+            });
+        }
+
+        studentModal.addEventListener('click', (e) => {
+            if (e.target === studentModal) closeStudentModal();
+        });
     </script>
     
     <!-- ES6 Modules as per prompt requirements -->

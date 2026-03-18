@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetPrep UdeA | Aula Virtual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+    <header class="bg-emerald-900 text-white border-b border-emerald-800 sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
+            <div>
+                <p class="text-emerald-200 text-xs uppercase tracking-widest font-bold">Aula Virtual</p>
+                <h1 class="text-xl sm:text-2xl font-bold">VetPrep UdeA</h1>
+                <p id="welcome-text" class="text-emerald-100 text-sm mt-1"></p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="px-4 py-2 rounded-full text-sm font-semibold bg-white/10 hover:bg-white/20 transition-colors">Inicio</a>
+                <button id="logout-btn" class="px-4 py-2 rounded-full text-sm font-semibold bg-red-600 hover:bg-red-500 transition-colors">
+                    Cerrar sesion
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+        <section class="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 sm:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Tu ruta de estudio</h2>
+            <p class="text-gray-600">Aqui puedes validar que los videos y PDF se abren dentro de la misma pagina.</p>
+        </section>
+
+        <section class="space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-circle-play"></i>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Videos del curso</h3>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="p-4 border-b border-gray-100">
+                        <h4 class="font-bold text-gray-900">Clase 1: Estrategia para examen UdeA</h4>
+                        <p class="text-sm text-gray-500">Video embebido en la plataforma</p>
+                    </div>
+                    <div class="aspect-video bg-gray-100">
+                        <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4" title="Clase 1 VetPrep" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="p-4 border-b border-gray-100">
+                        <h4 class="font-bold text-gray-900">Clase 2: Comprension lectora</h4>
+                        <p class="text-sm text-gray-500">Video embebido en la plataforma</p>
+                    </div>
+                    <div class="aspect-video bg-gray-100">
+                        <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" title="Clase 2 VetPrep" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="space-y-4 pb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Material PDF</h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="p-4 border-b border-gray-100 flex items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Guia de practica 1</h4>
+                            <p class="text-sm text-gray-500">PDF en visor embebido</p>
+                        </div>
+                        <a class="text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" target="_blank" rel="noopener noreferrer">Abrir aparte</a>
+                    </div>
+                    <div class="h-[450px] bg-gray-100">
+                        <iframe class="w-full h-full" src="https://docs.google.com/gview?embedded=1&url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" title="PDF Guia 1" loading="lazy"></iframe>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="p-4 border-b border-gray-100 flex items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Guia de practica 2</h4>
+                            <p class="text-sm text-gray-500">PDF en visor embebido</p>
+                        </div>
+                        <a class="text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="https://www.orimi.com/pdf-test.pdf" target="_blank" rel="noopener noreferrer">Abrir aparte</a>
+                    </div>
+                    <div class="h-[450px] bg-gray-100">
+                        <iframe class="w-full h-full" src="https://docs.google.com/gview?embedded=1&url=https://www.orimi.com/pdf-test.pdf" title="PDF Guia 2" loading="lazy"></iframe>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const studentLoggedIn = localStorage.getItem('vetprep_student_logged_in') === 'true';
+        const studentName = localStorage.getItem('vetprep_student_name') || 'Estudiante';
+        const studentEmail = localStorage.getItem('vetprep_student_email') || '';
+
+        if (!studentLoggedIn) {
+            window.location.replace('index.html');
+        }
+
+        const welcomeText = document.getElementById('welcome-text');
+        welcomeText.textContent = `${studentName} ${studentEmail ? `(${studentEmail})` : ''}`;
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('vetprep_student_logged_in');
+            localStorage.removeItem('vetprep_student_name');
+            localStorage.removeItem('vetprep_student_email');
+            window.location.replace('index.html');
+        });
+    </script>
+</body>
+</html>
