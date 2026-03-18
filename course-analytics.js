@@ -77,3 +77,15 @@ window.addEventListener("vetprep:pdf_open", (event) => {
         `Archivo: ${href}`
     ]);
 });
+
+window.addEventListener("vetprep:class_change", (event) => {
+    const classNumber = event.detail?.classNumber || "N/A";
+    const title = event.detail?.title || "Clase";
+    const module = event.detail?.module || "General";
+
+    logCourseEvent("class_change", {
+        classNumber,
+        title,
+        module
+    });
+});
