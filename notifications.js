@@ -2,6 +2,37 @@ import { db } from "./firebase-config.js";
 import { collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 let isInitialLoad = true;
+const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
+const sentNotifications = new Set();
+
+async function sendAdminNotification(docId, data) {
+    if (sentNotifications.has(docId)) return;
+    sentNotifications.add(docId);
+
+    const plan = data.plan || "Plan desconocido";
+    const nombre = data.nombre || "Estudiante anónimo";
+    const email = data.email || "N/A";
+
+    try {
+        await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                _subject: "Nueva inscripción VetPrep",
+                _replyto: email !== "N/A" ? email : undefined,
+                estudiante: nombre,
+                correo_estudiante: email,
+                plan,
+                mensaje: `Nueva inscripción detectada\nNombre: ${nombre}\nCorreo: ${email}\nPlan: ${plan}`
+            })
+        });
+    } catch (error) {
+        console.warn("No se pudo enviar la notificacion por correo:", error);
+    }
+}
 
 // Solo escucha a los documentos más recientes para no iterar sobre todos la primera vez.
 const q = query(collection(db, "registrations"), orderBy("createdAt", "desc"), limit(5));
@@ -18,6 +49,7 @@ onSnapshot(q, (snapshot) => {
             const data = change.doc.data();
             const plan = data.plan || 'Plan desconocido';
             const nombre = data.nombre || 'Estudiante anónimo';
+            sendAdminNotification(change.doc.id, data);
             
             // Simulación de sistema de alertas vía Console.
             console.log(
