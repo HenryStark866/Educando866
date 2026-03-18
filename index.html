@@ -267,6 +267,7 @@
                     &copy; <span id="year">2026</span> VetPrep UdeA. Todos los derechos reservados. 
                     <br class="hidden md:block">
                     <span class="opacity-70 text-xs mt-2 block">No somos la Universidad de Antioquia, preparamos para su examen.</span>
+                    <span class="opacity-70 text-xs mt-1 block">Version: 1.1.001-IO</span>
                 </div>
                 <!-- Admin Login Trigger (Made more visible) -->
                 <button id="admin-trigger-btn" class="mt-8 md:mt-0 px-6 py-2.5 bg-gray-900 border border-gray-800 hover:border-emerald-500 rounded-full text-gray-400 hover:text-emerald-400 transition-all cursor-pointer text-sm font-medium flex items-center gap-2 shadow-lg group" title="Acceso Administrativo">
@@ -467,6 +468,16 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        const appVersion = '1.1.001-IO';
+        const cacheKey = 'vetprep_app_version';
+        const hasVersionInUrl = new URLSearchParams(window.location.search).has('v');
+        if (localStorage.getItem(cacheKey) !== appVersion && !hasVersionInUrl) {
+            localStorage.setItem(cacheKey, appVersion);
+            const url = new URL(window.location.href);
+            url.searchParams.set('v', appVersion);
+            window.location.replace(url.toString());
+        }
 
         const studentModal = document.getElementById('student-modal');
         const studentLoginBtn = document.getElementById('student-login-btn');
