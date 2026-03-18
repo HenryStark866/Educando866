@@ -4,6 +4,13 @@ import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/fir
 
 const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
 
+function withTimeout(promise, ms, label) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout:${label}`)), ms))
+    ]);
+}
+
 /**
  * Guarda los resultados del taller en Firestore de forma automática.
  * @param {string} workshopType - 'Logica' o 'Lectura'
@@ -78,6 +85,18 @@ Aciertos: ${rawScore}/${totalQuestions}
 Firebase ID: ${docId}
         `.trim();
 
+        await withTimeout(addDoc(collection(db, "mail_notifications"), {
+            channel: "formsubmit",
+            to: ADMIN_NOTIFICATION_EMAIL,
+            subject: `Nuevo Resultado: ${workshopType} - ${studentName}`,
+            student: {
+                name: studentName,
+                email: studentEmail
+            },
+            createdAt: serverTimestamp(),
+            status: "attempted"
+        }), 7000, "mail_notifications");
+
         await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
             method: "POST",
             headers: { 
@@ -87,6 +106,8 @@ Firebase ID: ${docId}
             body: JSON.stringify({
                 _subject: `Nuevo Resultado: ${workshopType} - ${studentName}`,
                 _replyto: studentEmail,
+                _captcha: 'false',
+                _template: 'table',
                 mensaje: emailMessage,
                 estudiante: studentName,
                 correo_estudiante: studentEmail,

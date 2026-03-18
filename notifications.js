@@ -1,9 +1,16 @@
 import { db } from "./firebase-config.js";
-import { collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 let isInitialLoad = true;
 const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
 const sentNotifications = new Set();
+
+function withTimeout(promise, ms, label) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout:${label}`)), ms))
+    ]);
+}
 
 async function sendAdminNotification(docId, data) {
     if (sentNotifications.has(docId)) return;
@@ -14,6 +21,18 @@ async function sendAdminNotification(docId, data) {
     const email = data.email || "N/A";
 
     try {
+        await withTimeout(addDoc(collection(db, "mail_notifications"), {
+            channel: "formsubmit",
+            to: ADMIN_NOTIFICATION_EMAIL,
+            subject: "Nueva inscripción VetPrep",
+            student: {
+                name: nombre,
+                email
+            },
+            createdAt: serverTimestamp(),
+            status: "attempted"
+        }), 7000, "mail_notifications");
+
         await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
             method: "POST",
             headers: {
@@ -23,6 +42,8 @@ async function sendAdminNotification(docId, data) {
             body: JSON.stringify({
                 _subject: "Nueva inscripción VetPrep",
                 _replyto: email !== "N/A" ? email : undefined,
+                _captcha: "false",
+                _template: "table",
                 estudiante: nombre,
                 correo_estudiante: email,
                 plan,

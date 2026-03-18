@@ -6,21 +6,44 @@ const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
 const studentName = localStorage.getItem("vetprep_student_name") || "Estudiante";
 const studentEmail = localStorage.getItem("vetprep_student_email") || "N/A";
 
+async function withTimeout(promise, ms, label) {
+    return Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout:${label}`)), ms))
+    ]);
+}
+
 async function sendAdminEmail(subject, lines) {
+    const payload = {
+        _subject: subject,
+        _replyto: studentEmail !== "N/A" ? studentEmail : undefined,
+        _captcha: "false",
+        _template: "table",
+        estudiante: studentName,
+        correo_estudiante: studentEmail,
+        mensaje: lines.join("\n")
+    };
+
     try {
+        await withTimeout(addDoc(collection(db, "mail_notifications"), {
+            channel: "formsubmit",
+            to: ADMIN_NOTIFICATION_EMAIL,
+            subject,
+            student: {
+                name: studentName,
+                email: studentEmail
+            },
+            createdAt: serverTimestamp(),
+            status: "attempted"
+        }), 7000, "mail_notifications");
+
         await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({
-                _subject: subject,
-                _replyto: studentEmail !== "N/A" ? studentEmail : undefined,
-                estudiante: studentName,
-                correo_estudiante: studentEmail,
-                mensaje: lines.join("\n")
-            })
+            body: JSON.stringify(payload)
         });
     } catch (error) {
         console.error("No se pudo enviar notificacion por correo:", error);
@@ -41,7 +64,7 @@ async function logCourseEvent(eventType, details = {}) {
     };
 
     try {
-        await addDoc(collection(db, "course_activity"), eventData);
+        await withTimeout(addDoc(collection(db, "course_activity"), eventData), 7000, "course_activity");
     } catch (error) {
         console.error("No se pudo guardar evento en Firestore:", error);
     }
