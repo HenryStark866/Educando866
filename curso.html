@@ -78,6 +78,19 @@
                 </div>
                 <div id="class-list" class="space-y-2 mb-8"></div>
 
+                <!-- Pomodoro Widget -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm mb-6 flex flex-col items-center transform hover:scale-[1.02] transition-transform">
+                    <div class="flex items-center gap-2 mb-2 w-full justify-center text-gray-400">
+                        <i class="fa-solid fa-stopwatch text-emerald-500 animate-pulse"></i>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Pomodoro Focus</span>
+                    </div>
+                    <div id="pomodoro-display" class="text-4xl font-extrabold text-gray-900 mb-4 tracking-tighter" style="font-family: monospace;">25:00</div>
+                    <div class="flex gap-2 w-full">
+                        <button id="pomodoro-start" class="flex-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 py-2 rounded-xl text-sm font-bold transition-all shadow-sm">Iniciar</button>
+                        <button id="pomodoro-reset" class="flex-1 bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700 py-2 rounded-xl text-sm font-bold transition-colors">Reiniciar</button>
+                    </div>
+                </div>
+
                 <!-- Formation Tips Widget -->
                 <div class="bg-emerald-900 rounded-2xl p-5 text-white shadow-lg overflow-hidden relative group">
                     <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-800 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
@@ -93,49 +106,63 @@
                 </div>
             </aside>
 
-            <div class="xl:col-span-8 space-y-6">
-                <article class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="xl:col-span-8 flex flex-col h-full space-y-4">
+                <!-- Tabs Header -->
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-2 flex gap-2 overflow-x-auto">
+                    <button id="tab-leccion" class="tab-btn flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap active-tab">
+                        <i class="fa-solid fa-book-open"></i> Lección Interactiva
+                    </button>
+                    <button id="tab-video" class="tab-btn flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all bg-white text-gray-600 hover:bg-gray-50 border border-transparent flex items-center justify-center gap-2 whitespace-nowrap">
+                        <i class="fa-brands fa-youtube text-red-500"></i> Videoclase
+                    </button>
+                    <button id="tab-notas" class="tab-btn flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all bg-white text-gray-600 hover:bg-gray-50 border border-transparent flex items-center justify-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-pen-to-square text-blue-500"></i> Cuaderno
+                    </button>
+                </div>
+
+                <!-- Tabs Content -->
+                <article class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden flex-grow flex flex-col min-h-[600px] relative">
+                    
+                    <!-- Header shared across tabs (Title, Complete button) -->
+                    <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white z-10 relative">
                         <div>
                             <p id="class-module" class="text-emerald-700 text-xs uppercase tracking-widest font-bold"></p>
-                            <h3 id="class-title" class="text-2xl font-bold text-gray-900 mt-1"></h3>
+                            <h3 id="class-title" class="text-xl sm:text-2xl font-bold text-gray-900 mt-1"></h3>
                         </div>
-                        <button id="mark-complete-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border-2">
+                        <button id="mark-complete-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border-2 flex-shrink-0">
                             <i id="complete-icon" class="fa-regular fa-circle-check"></i>
                             <span id="complete-text">Marcar como vista</span>
                         </button>
                     </div>
-                    <p id="class-description" class="text-gray-600 mt-3"></p>
-                    <div class="aspect-video bg-gray-100">
-                        <iframe
-                            id="course-video"
-                            class="w-full h-full"
-                            src=""
-                            title="Clase en video"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen
-                            loading="lazy"></iframe>
-                    </div>
-                </article>
 
-                <article class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden" data-material-title="">
-                    <div class="p-5 border-b border-gray-100 flex items-center justify-between gap-4">
-                        <div>
-                            <h4 id="pdf-title" class="font-bold text-gray-900 text-lg"></h4>
-                            <p class="text-sm text-gray-500">Material oficial Prep Universitario HenryStark, compatible con navegadores modernos</p>
+                    <!-- Panel Lección -->
+                    <div id="panel-leccion" class="tab-panel flex-grow w-full h-full">
+                        <iframe id="course-module-iframe" class="w-full h-full min-h-[600px] border-none" src="" title="Módulo Interactivo"></iframe>
+                    </div>
+
+                    <!-- Panel Video -->
+                    <div id="panel-video" class="tab-panel hidden flex-grow w-full h-full flex-col">
+                        <p id="class-description" class="p-5 text-gray-600 text-sm border-b border-gray-100 bg-gray-50"></p>
+                        <div class="aspect-video bg-gray-900 w-full flex-grow">
+                            <iframe id="course-video" class="w-full h-full" src="" title="Clase en video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
-                        <a id="open-pdf-top" class="js-pdf-open text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="#" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
                     </div>
-                    <div class="h-[520px] bg-gray-100">
-                        <object id="course-pdf-object" class="w-full h-full" data="" type="application/pdf">
-                            <iframe id="course-pdf-iframe" class="w-full h-full" src="" title="PDF de la clase" loading="lazy"></iframe>
-                        </object>
+
+                    <!-- Panel Notas -->
+                    <div id="panel-notas" class="tab-panel hidden flex-grow w-full h-full bg-[#fdfbf7]">
+                        <div class="flex flex-col h-full h-[600px]">
+                            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200/60 bg-white/50">
+                                <h4 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                                    <i class="fa-solid fa-book-bookmark text-emerald-600"></i> Mis Apuntes Personales
+                                </h4>
+                                <span id="save-status" class="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-700 opacity-0 transition-opacity flex items-center gap-1">
+                                    <i class="fa-solid fa-check"></i> Guardado
+                                </span>
+                            </div>
+                            <textarea id="class-notes" class="flex-grow w-full p-6 bg-transparent resize-none outline-none text-gray-700 text-base leading-relaxed placeholder-gray-400" placeholder="Anota aquí fórmulas, conceptos clave o dudas de esta clase. Se guardarán automáticamente en tu navegador..."></textarea>
+                        </div>
                     </div>
-                    <div class="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-600 flex items-center justify-between">
-                        <span>Si tu navegador no permite vista embebida, usa "Abrir PDF".</span>
-                        <a id="open-pdf-bottom" class="js-pdf-open text-emerald-700 font-semibold" href="#" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
-                    </div>
+
                 </article>
             </div>
         </section>
@@ -179,12 +206,16 @@
         const classTitle = document.getElementById('class-title');
         const classDescription = document.getElementById('class-description');
         const courseVideo = document.getElementById('course-video');
-        const coursePdfObject = document.getElementById('course-pdf-object');
-        const coursePdfIframe = document.getElementById('course-pdf-iframe');
-        const pdfTitle = document.getElementById('pdf-title');
-        const openPdfTop = document.getElementById('open-pdf-top');
-        const openPdfBottom = document.getElementById('open-pdf-bottom');
-        const pdfCard = document.querySelector('[data-material-title]');
+        const courseModuleIframe = document.getElementById('course-module-iframe');
+        const classNotes = document.getElementById('class-notes');
+        const saveStatus = document.getElementById('save-status');
+
+        const tabLeccion = document.getElementById('tab-leccion');
+        const tabVideo = document.getElementById('tab-video');
+        const tabNotas = document.getElementById('tab-notas');
+        const panelLeccion = document.getElementById('panel-leccion');
+        const panelVideo = document.getElementById('panel-video');
+        const panelNotas = document.getElementById('panel-notas');
 
         const savedClass = Number(localStorage.getItem('vetprep_current_class') || '1');
         let currentIndex = Number.isNaN(savedClass) ? 0 : Math.min(Math.max(savedClass - 1, 0), COURSE_CLASSES.length - 1);
@@ -199,13 +230,65 @@
             }));
         }
 
-        function dispatchPdfOpen(courseClass) {
-            window.dispatchEvent(new CustomEvent('vetprep:pdf_open', {
-                detail: {
-                    title: `Clase ${courseClass.number}: ${courseClass.title}`,
-                    href: courseClass.pdf
+        // Tab Navigation Logic
+        function switchTab(activeBtn, activePanel) {
+            [tabLeccion, tabVideo, tabNotas].forEach(btn => {
+                btn.className = 'tab-btn flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all bg-white text-gray-600 hover:bg-gray-50 border border-transparent flex items-center justify-center gap-2 whitespace-nowrap';
+            });
+            [panelLeccion, panelVideo, panelNotas].forEach(panel => {
+                panel.classList.add('hidden');
+                panel.classList.remove('flex', 'flex-col');
+            });
+            
+            activeBtn.className = 'tab-btn flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap active-tab';
+            activePanel.classList.remove('hidden');
+            if(activePanel === panelVideo) activePanel.classList.add('flex', 'flex-col');
+        }
+
+        tabLeccion.addEventListener('click', () => switchTab(tabLeccion, panelLeccion));
+        tabVideo.addEventListener('click', () => switchTab(tabVideo, panelVideo));
+        tabNotas.addEventListener('click', () => switchTab(tabNotas, panelNotas));
+
+        // Auto-save notes
+        let saveTimeout;
+        classNotes.addEventListener('input', () => {
+            clearTimeout(saveTimeout);
+            saveStatus.style.opacity = '0';
+            saveTimeout = setTimeout(() => {
+                const currentClassNum = COURSE_CLASSES[currentIndex].number;
+                progressManager.saveClassNote(currentClassNum, classNotes.value);
+                saveStatus.style.opacity = '1';
+                setTimeout(() => saveStatus.style.opacity = '0', 2000);
+            }, 800);
+        });
+
+        function setClass(index) {
+            currentIndex = index;
+            const courseClass = COURSE_CLASSES[index];
+            localStorage.setItem('vetprep_current_class', (index + 1).toString());
+            
+            classModule.textContent = courseClass.module;
+            classTitle.textContent = `Clase ${courseClass.number}: ${courseClass.title}`;
+            classDescription.textContent = courseClass.description;
+            classCounter.textContent = `${courseClass.number}/${COURSE_CLASSES.length}`;
+            
+            courseVideo.src = `https://www.youtube.com/embed/${courseClass.videoId}`;
+            
+            const moduleNum = courseClass.number.toString().padStart(2, '0');
+            courseModuleIframe.src = `assets/modulos/modulo-${moduleNum}.html`;
+            
+            classNotes.value = progressManager.getClassNote(courseClass.number);
+
+            Array.from(classList.children).forEach((btn, i) => {
+                if (i === index) {
+                    btn.className = 'w-full text-left p-3 rounded-xl transition-all border-2 bg-emerald-50 border-emerald-500 text-emerald-900 shadow-sm mb-2';
+                } else {
+                    btn.className = 'w-full text-left p-3 rounded-xl transition-all border-2 bg-white border-gray-200 text-gray-600 hover:border-emerald-300 hover:bg-emerald-50 mb-2';
                 }
-            }));
+            });
+
+            updateProgressUI();
+            dispatchClassChange(courseClass);
         }
 
         function updateProgressUI() {
@@ -273,11 +356,7 @@
             });
         }
 
-        [openPdfTop, openPdfBottom].forEach((link) => {
-            link.addEventListener('click', () => {
-                dispatchPdfOpen(COURSE_CLASSES[currentIndex]);
-            });
-        });
+
 
         document.getElementById('logout-btn').addEventListener('click', () => {
             localStorage.removeItem('vetprep_student_logged_in');
@@ -317,6 +396,57 @@
         }
 
         setInterval(rotateTips, 8000);
+        // Pomodoro Timer Logic
+        let pomoInterval;
+        let pomoTime = 25 * 60;
+        let isPomoRunning = false;
+        const pomoDisplay = document.getElementById('pomodoro-display');
+        const pomoStartBtn = document.getElementById('pomodoro-start');
+        
+        function formatPomoTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+        
+        if (pomoStartBtn) {
+            pomoStartBtn.addEventListener('click', () => {
+                if (isPomoRunning) {
+                    clearInterval(pomoInterval);
+                    isPomoRunning = false;
+                    pomoStartBtn.textContent = 'Reanudar';
+                    pomoStartBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 py-2 rounded-xl text-sm font-bold transition-all shadow-sm';
+                } else {
+                    isPomoRunning = true;
+                    pomoStartBtn.textContent = 'Pausar';
+                    pomoStartBtn.className = 'flex-1 bg-yellow-100 text-yellow-700 hover:bg-yellow-200 py-2 rounded-xl text-sm font-bold transition-all shadow-sm';
+                    pomoInterval = setInterval(() => {
+                        if (pomoTime > 0) {
+                            pomoTime--;
+                            pomoDisplay.textContent = formatPomoTime(pomoTime);
+                        } else {
+                            clearInterval(pomoInterval);
+                            isPomoRunning = false;
+                            pomoStartBtn.textContent = 'Iniciar';
+                            pomoStartBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 py-2 rounded-xl text-sm font-bold transition-all shadow-sm';
+                            alert('¡Pomodoro de 25 minutos terminado! El cerebro necesita descansar. Tómate 5 minutos.');
+                            pomoTime = 5 * 60; // 5 min break
+                            pomoDisplay.textContent = formatPomoTime(pomoTime);
+                        }
+                    }, 1000);
+                }
+            });
+            
+            document.getElementById('pomodoro-reset').addEventListener('click', () => {
+                clearInterval(pomoInterval);
+                isPomoRunning = false;
+                pomoTime = 25 * 60;
+                pomoDisplay.textContent = formatPomoTime(pomoTime);
+                pomoStartBtn.textContent = 'Iniciar';
+                pomoStartBtn.className = 'flex-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 py-2 rounded-xl text-sm font-bold transition-all shadow-sm';
+            });
+        }
+
 
         buildClassList();
         setClass(currentIndex);

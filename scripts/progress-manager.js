@@ -10,18 +10,46 @@ class ProgressManager {
     }
 
     loadProgress() {
-        const saved = localStorage.getItem(this.storageKey);
-        return saved ? JSON.parse(saved) : {
+        const defaultProgress = {
             completedClasses: [],
             completedWorkshops: [],
+            classNotes: {},
+            quizScores: {},
             lastUpdate: new Date().toISOString()
         };
+        const saved = localStorage.getItem(this.storageKey);
+        if (saved) {
+            try {
+                return { ...defaultProgress, ...JSON.parse(saved) };
+            } catch (e) {
+                return defaultProgress;
+            }
+        }
+        return defaultProgress;
     }
 
     saveProgress() {
         this.progress.lastUpdate = new Date().toISOString();
         localStorage.setItem(this.storageKey, JSON.stringify(this.progress));
         this.notifyUpdate();
+    }
+
+    saveClassNote(classNumber, noteText) {
+        this.progress.classNotes[classNumber] = noteText;
+        this.saveProgress();
+    }
+
+    getClassNote(classNumber) {
+        return this.progress.classNotes[classNumber] || '';
+    }
+
+    saveQuizScore(quizId, score) {
+        this.progress.quizScores[quizId] = score;
+        this.saveProgress();
+    }
+
+    getQuizScore(quizId) {
+        return this.progress.quizScores[quizId] || 0;
     }
 
     markClassComplete(classNumber) {

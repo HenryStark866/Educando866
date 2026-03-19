@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const responses = {
         biologia: [
-            "Para el componente de Biología en Veterinaria UdeA, enfócate en **biología celular (mitosis, meiosis)** y los **sistemas del cuerpo animal**.",
+            "Para el componente de Biología UdeA, enfócate en **biología celular (mitosis, meiosis)** y los **sistemas metabólicos celulares**.",
             "¡Excelente elección! ¿Sabías que las preguntas de **genética mendeliana** son muy frecuentes en el examen de la UdeA?"
         ],
         quimica: [
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Default Welcome Message
     chatMessages.innerHTML = `
         <div class="self-start max-w-[85%] bg-white p-3.5 rounded-2xl rounded-tl-sm shadow-sm border border-gray-200 text-sm text-gray-700 slide-up leading-relaxed relative">
-            ¡Hola futuro veterinario! <i class="fa-solid fa-paw text-emerald-500"></i><br>Soy tu <b>Profe IA</b>. Estoy aquí para resolver tus dudas sobre el examen de la UdeA. <br><br>¿Qué área quieres repasar hoy?
+            ¡Hola futuro universitario! <i class="fa-solid fa-paw text-emerald-500"></i><br>Soy tu <b>Profe IA</b>. Estoy aquí para resolver tus dudas sobre el examen de la UdeA. <br><br>¿Qué área quieres repasar hoy?
         </div>
     `;
 
