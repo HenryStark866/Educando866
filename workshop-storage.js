@@ -1,5 +1,5 @@
 // workshop-storage.js
-import { db } from "./firebase-config.js";
+import { db, firebaseReady, firebaseInitialized } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
@@ -13,7 +13,7 @@ function withTimeout(promise, ms, label) {
 
 /**
  * Guarda los resultados del taller en Firestore de forma automática.
- * @param {string} workshopType - 'Logica' o 'Lectura'
+ * @param {string} workshopType - Tipo de taller (ej: 'Gestión del Tiempo y Control de Ansiedad')
  * @param {Array} userAnswers - Array con las respuestas seleccionadas por el usuario.
  * @param {Array} correctAnswers - Array base con las respuestas correctas.
  */
@@ -61,6 +61,11 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
 
     // Firebase addDoc con timeout de 8 segundos para evitar que se quede pegado ("Guardando...")
     try {
+        // Check if Firebase is ready before attempting to use it
+        if (!firebaseInitialized) {
+            throw new Error("Firebase not initialized");
+        }
+        
         const addDocPromise = addDoc(collection(db, "talleres_resultados"), workshopData);
         const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout de Firebase")), 8000));
         
@@ -70,7 +75,7 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
         firebaseSuccess = true;
     } catch (e) {
         console.error("Error guardando el resultado del taller en Firebase: ", e);
-        // Fallback a localStorage
+        // Fallback to localStorage
         localStorage.setItem(`backup_score_${workshopType}_${Date.now()}`, JSON.stringify(workshopData));
     }
 
@@ -85,18 +90,22 @@ Aciertos: ${rawScore}/${totalQuestions}
 Firebase ID: ${docId}
         `.trim();
 
-        await withTimeout(addDoc(collection(db, "mail_notifications"), {
-            channel: "formsubmit",
-            to: ADMIN_NOTIFICATION_EMAIL,
-            subject: `Nuevo Resultado: ${workshopType} - ${studentName}`,
-            student: {
-                name: studentName,
-                email: studentEmail
-            },
-            createdAt: serverTimestamp(),
-            status: "attempted"
-        }), 7000, "mail_notifications");
+        // Try to store notification in Firebase if available
+        if (firebaseInitialized) {
+            await withTimeout(addDoc(collection(db, "mail_notifications"), {
+                channel: "formsubmit",
+                to: ADMIN_NOTIFICATION_EMAIL,
+                subject: `Nuevo Resultado: ${workshopType} - ${studentName}`,
+                student: {
+                    name: studentName,
+                    email: studentEmail
+                },
+                createdAt: serverTimestamp(),
+                status: "attempted"
+            }), 7000, "mail_notifications");
+        }
 
+        // Always try FormSubmit as backup/primary notification method
         await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
             method: "POST",
             headers: { 
@@ -121,7 +130,13 @@ Firebase ID: ${docId}
         console.error("Error enviando el correo con FormSubmit:", emailError);
     }
 
-    // Devolvemos success basado en si pasamos la ejecución (incluso si firebase falló, intentamos enviar el correo)
+    // Devolvemos resultado basado en si completamos la ejecución
     // Para que la UI avance y no se quede pegada, siempre devolvemos un objeto
-    return { success: true, score: finalScore, raw: rawScore, firebaseSuccess };
+    return { 
+        success: true, 
+        score: finalScore, 
+        raw: rawScore, 
+        firebaseSuccess,
+        firebaseAvailable: firebaseInitialized
+    };
 }
