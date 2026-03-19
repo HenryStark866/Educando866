@@ -91,6 +91,27 @@
                     </div>
                 </div>
 
+
+                <!-- Universidades de Colombia Widget -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-university text-emerald-500"></i>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500">Universidades de Colombia</span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <a href="https://www.udea.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Universidad de Antioquia</a>
+                        <a href="https://unal.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Universidad Nacional</a>
+                        <a href="https://www.univalle.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Universidad del Valle</a>
+                        <a href="https://www.uninorte.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Universidad del Norte</a>
+                        <a href="https://www.uis.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Universidad Industrial de Santander</a>
+                        <a href="https://www.umanizales.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Universidad de Manizales</a>
+                        <a href="https://www.uptc.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>UPTC Tunja</a>
+                        <a href="https://www.unisabaneta.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">U</span>Unisabaneta</a>
+                        <a href="https://www.pascualbravo.edu.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-emerald-50 transition-colors text-gray-700 hover:text-emerald-700 font-medium group"><span class="w-6 text-center text-emerald-400 group-hover:scale-110 transition-transform">I</span>Inst. Pascual Bravo</a>
+                        <a href="https://www.icfes.gov.co" target="_blank" rel="noopener" class="flex items-center gap-2 p-2 rounded-xl hover:bg-blue-50 transition-colors text-blue-700 hover:text-blue-800 font-medium group"><span class="w-6 text-center text-blue-400 group-hover:scale-110 transition-transform"><i class="fa-solid fa-file-pen text-xs"></i></span>ICFES Oficial</a>
+                    </div>
+                </div>
+
                 <!-- Formation Tips Widget -->
                 <div class="bg-emerald-900 rounded-2xl p-5 text-white shadow-lg overflow-hidden relative group">
                     <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-800 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
@@ -170,6 +191,53 @@
 
     <script type="module">
         import { progressManager } from "./scripts/progress-manager.js";
+        import { auth, db, verificarPago, onAuthStateChanged, signOut, doc, getDoc } from "./firebase-config.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+        // ─── PAYWALL GUARD ────────────────────────────────────────────────────────
+        // Show a loading overlay while checking auth state.
+        const loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'auth-loading';
+        loadingOverlay.innerHTML = `<div style="position:fixed;inset:0;z-index:9999;background:#064e3b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px">
+            <div style="width:48px;height:48px;border:4px solid rgba(255,255,255,0.3);border-top-color:#10b981;border-radius:50%;animation:spin 0.8s linear infinite"></div>
+            <p style="color:#d1fae5;font-family:Poppins,sans-serif;font-size:14px;font-weight:600">Verificando tu acceso...</p>
+            <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+        </div>`;
+        document.body.prepend(loadingOverlay);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.replace('index.html');
+                return;
+            }
+            const pagado = await verificarPago(user.uid);
+            if (!pagado) {
+                document.body.innerHTML = `<div style="position:fixed;inset:0;background:#064e3b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-family:Poppins,sans-serif">
+                    <i style="font-size:48px;color:#10b981" class="fa-solid fa-lock"></i>
+                    <h1 style="color:white;font-size:24px;font-weight:800">Acceso Pendiente</h1>
+                    <p style="color:#a7f3d0;max-width:400px">Tu pago está en proceso de verificación. Te notificaremos por correo cuando tu acceso esté activo.</p>
+                    <a href="index.html" style="margin-top:12px;padding:12px 28px;background:#10b981;color:white;font-weight:700;border-radius:12px;text-decoration:none">Volver al Inicio</a>
+                </div>`;
+                return;
+            }
+            // Store user info for UI
+            localStorage.setItem('educando866_uid', user.uid);
+            localStorage.setItem('educando866_email', user.email);
+            // Fetch profile from Firestore for display
+            try {
+                const snap = await getDoc(doc(db, 'estudiantes', user.uid));
+                if (snap.exists()) {
+                    const d = snap.data();
+                    document.getElementById('welcome-text').textContent = d.nombre || user.email;
+                    document.getElementById('student-badge').textContent = `Perfil estudiante · ${d.plan || 'general'}`;
+                } else {
+                    document.getElementById('welcome-text').textContent = user.email;
+                }
+            } catch(e) { document.getElementById('welcome-text').textContent = user.email; }
+            // Remove loading overlay
+            loadingOverlay.remove();
+        });
+        // ─────────────────────────────────────────────────────────────────────────
 
         const COURSE_CLASSES = [
             { number: 1, module: 'Estrategia', title: 'Fundamentos de estrategia para examen UdeA', description: 'Planificacion, control de tiempo y metodologias de alto rendimiento.', videoId: 'Se3e_Wc-uys', pdf: 'assets/pdfs/clase-01.pdf' },
@@ -358,16 +426,9 @@
 
 
 
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            localStorage.removeItem('vetprep_student_logged_in');
-            localStorage.removeItem('vetprep_student_name');
-            localStorage.removeItem('vetprep_student_email');
-            localStorage.removeItem('vetprep_student_id');
-            localStorage.removeItem('vetprep_student_access_code');
-            localStorage.removeItem('vetprep_student_role');
-            localStorage.removeItem('vetprep_student_plan');
-            localStorage.removeItem('vetprep_student_status');
-            localStorage.removeItem('vetprep_current_class');
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await signOut(auth);
+            localStorage.clear();
             window.location.replace('index.html');
         });
 

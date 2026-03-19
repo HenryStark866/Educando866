@@ -572,7 +572,7 @@
         if (closeStudentBtn) closeStudentBtn.addEventListener('click', closeStudentModal);
 
         if (studentLoginForm) {
-            studentLoginForm.addEventListener('submit', (e) => {
+            studentLoginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 studentLoginError.classList.add('hidden');
 
@@ -580,19 +580,39 @@
                 let password = document.getElementById('student-password').value;
 
                 if (!email || !password) {
+                    studentLoginError.textContent = 'Por favor completa todos los campos.';
                     studentLoginError.classList.remove('hidden');
                     return;
                 }
 
-                // Generar un nombre temporal basado en el correo para la bienvenida
-                let name = email.split('@')[0];
-                name = name.charAt(0).toUpperCase() + name.slice(1);
+                // Disable button while logging in
+                const submitBtn = studentLoginForm.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Verificando...';
 
-                localStorage.setItem('vetprep_student_name', name);
-                localStorage.setItem('vetprep_student_email', email);
-                localStorage.setItem('vetprep_student_role', 'estudiante');
-                localStorage.setItem('vetprep_student_logged_in', 'true');
-                window.location.href = 'curso.html';
+                try {
+                    const { signInWithEmailAndPassword, verificarPago, auth } = await import('./firebase-config.js');
+                    const userCred = await signInWithEmailAndPassword(auth, email, password);
+                    const pagado = await verificarPago(userCred.user.uid);
+                    if (pagado) {
+                        window.location.href = 'curso.html';
+                    } else {
+                        studentLoginError.textContent = 'Tu pago aún está en proceso. Escríbenos para activar tu acceso.';
+                        studentLoginError.classList.remove('hidden');
+                        const { signOut } = await import('./firebase-config.js');
+                        await signOut(auth);
+                    }
+                } catch (err) {
+                    let msg = 'Correo o contraseña incorrectos.';
+                    if (err.code === 'auth/user-not-found') msg = 'No encontramos una cuenta con ese correo.';
+                    if (err.code === 'auth/wrong-password') msg = 'Contraseña incorrecta.';
+                    if (err.code === 'auth/too-many-requests') msg = 'Demasiados intentos. Espera un momento.';
+                    studentLoginError.textContent = msg;
+                    studentLoginError.classList.remove('hidden');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Acceder al Aula';
+                }
             });
         }
 

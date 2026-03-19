@@ -1,6 +1,19 @@
+/**
+ * Educando866 / PrepUdeA - Firebase Configuration
+ * Proyecto: prepudea-platform
+ * Provee: db (Firestore), auth (Firebase Authentication), app
+ */
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { initializeFirestore } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-analytics.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBOLlMtZB9vfdbWo3PlABfTru19A2Id2I4",
@@ -15,27 +28,46 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = initializeFirestore(app, {
-    experimentalAutoDetectLongPolling: true,
-    useFetchStreams: false
-});
+const db = getFirestore(app);
 const auth = getAuth(app);
+const analytics = getAnalytics(app);
 
-// Authenticate anonymously (catch admin restricted operation silently)
-const initAnonAuth = async () => {
-    try {
-        await signInAnonymously(auth);
-    } catch (error) {
-        if (error.code === 'auth/admin-restricted-operation') {
-            console.warn("Autenticación anónima restringida por el administrador (esto es esperado en desarrollo o según configuración de Firebase).");
-        } else if (error.code === 'auth/network-request-failed') {
-            console.warn("No se pudo autenticar por red en este intento. La app reintentará operaciones automáticamente cuando haya conexión estable.");
-        } else {
-            console.error("Error en autenticación:", error);
-        }
+/**
+ * Crear perfil del estudiante en Firestore al registrarse.
+ * @param {string} uid - UID de Firebase Auth
+ * @param {string} nombre - Nombre completo
+ * @param {string} email - Correo electrónico
+ * @param {string} plan - Plan de acceso (ej. 'general')
+ */
+async function crearPerfilEstudiante(uid, nombre, email, plan = 'general') {
+    const ref = doc(db, 'estudiantes', uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+        await setDoc(ref, {
+            nombre,
+            email,
+            plan,
+            pago_verificado: false,   // El admin lo activa manualmente en Firestore Console
+            curso_completado: false,
+            clases_vistas: [],
+            quiz_scores: {},
+            fecha_registro: serverTimestamp()
+        });
     }
-};
+}
 
-initAnonAuth();
+/**
+ * Verifica si el usuario tiene pago verificado.
+ * @param {string} uid
+ * @returns {Promise<boolean>}
+ */
+async function verificarPago(uid) {
+    const ref = doc(db, 'estudiantes', uid);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+        return snap.data().pago_verificado === true;
+    }
+    return false;
+}
 
-export { app, db, auth };
+export { app, db, auth, analytics, crearPerfilEstudiante, verificarPago, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, doc, getDoc, setDoc, serverTimestamp };
