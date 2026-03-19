@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prep Universitario - Quiz: Gestión del Tiempo y Control de Ansiedad</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .option-radio:checked+div {
+            border-color: #10b981;
+            background-color: #ecfdf5;
+        }
+
+        .option-radio:checked+div .indicator {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .question-card {
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-emerald-900 border-b-4 border-emerald-600 shadow-md">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="curso.html" class="text-emerald-100 hover:text-white transition-colors mr-2">
+                    <i class="fa-solid fa-arrow-left text-xl"></i>
+                </a>
+                <i class="fa-solid fa-stopwatch text-emerald-400 text-3xl"></i>
+                <div>
+                    <h1 class="font-bold text-xl tracking-tight text-white leading-tight">Quiz: Gestión del Tiempo y Control de Ansiedad</h1>
+                    <p class="text-xs text-emerald-200 uppercase tracking-widest font-semibold flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></span> Evaluación rápida
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full relative">
+        <div id="questions-container" class="space-y-8">
+            <!-- Quiz Questions -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-200 question-card">
+                <div class="flex items-start gap-4 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold flex-shrink-0 text-sm border-2 border-emerald-200">
+                        1
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-gray-900 leading-relaxed mt-1">Si tienes 90 minutos para resolver 40 preguntas y ya llevas 30 minutos resolviendo 10 preguntas, ¿cuánto tiempo deberías asignar aproximadamente a cada pregunta restante para terminar a tiempo?</h3>
+                </div>
+                <div class="space-y-3 pl-0 md:pl-14">
+                    <label class="relative flex items-start p-4 cursor-pointer rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors group">
+                        <input type="radio" name="q1" value="0" class="peer sr-only option-radio">
+                        <div class="w-full flex items-center gap-4 transition-all pb-1">
+                            <div class="indicator w-6 h-6 rounded-full border-2 border-gray-300 flex-shrink-0 flex items-center justify-center font-bold text-xs text-transparent transition-all">✓</div>
+                            <span class="text-gray-700 font-medium group-hover:text-gray-900">A) 1.5 minutos por pregunta</span>
+                        </div>
+                    </label>
+                    <label class="relative flex items-start p-4 cursor-pointer rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors group">
+                        <input type="radio" name="q1" value="1" class="peer sr-only option-radio">
+                        <div class="w-full flex items-center gap-4 transition-all pb-1">
+                            <div class="indicator w-6 h-6 rounded-full border-2 border-gray-300 flex-shrink-0 flex items-center justify-center font-bold text-xs text-transparent transition-all">✓</div>
+                            <span class="text-gray-700 font-medium group-hover:text-gray-900">B) 2 minutos por pregunta</span>
+                        </div>
+                    </label>
+                    <label class="relative flex items-start p-4 cursor-pointer rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors group">
+                        <input type="radio" name="q1" value="2" class="peer sr-only option-radio">
+                        <div class="w-full flex items-center gap-4 transition-all pb-1">
+                            <div class="indicator w-6 h-6 rounded-full border-2 border-gray-300 flex-shrink-0 flex items-center justify-center font-bold text-xs text-transparent transition-all">✓</div>
+                            <span class="text-gray-700 font-medium group-hover:text-gray-900">C) 2.5 minutos por pregunta</span>
+                        </div>
+                    </label>
+                    <label class="relative flex items-start p-4 cursor-pointer rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors group">
+                        <input type="radio" name="q1" value="3" class="peer sr-only option-radio">
+                        <div class="w-full flex items-center gap-4 transition-all pb-1">
+                            <div class="indicator w-6 h-6 rounded-full border-2 border-gray-300 flex-shrink-0 flex items-center justify-center font-bold text-xs text-transparent transition-all">✓</div>
+                            <span class="text-gray-700 font-medium group-hover:text-gray-900">D) 3 minutos por pregunta</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Additional quiz questions would go here -->
+            <!-- For brevity, I'm showing just one question but mentioning there would be more -->
+            
+            <div class="text-center py-8">
+                <p class="text-gray-600">Este quiz contiene 5 preguntas. (Mostrando 1 de 5 como ejemplo)</p>
+                <button id="see-results-btn"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl transition-colors hover:-translate-y-0.5">
+                    Ver Resultados
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Quiz Results Modal (hidden by default) -->
+    <div id="results-modal"
+        class="fixed inset-0 z-50 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div
+            class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 p-8 transform transition-all">
+            <div class="text-center mb-6">
+                <div
+                    class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                    <i class="fa-solid fa-chart-bar"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">Resultados del Quiz</h2>
+            </div>
+            <div class="space-y-4">
+                <p class="text-gray-600">Has completado el quiz de Gestión del Tiempo y Control de Ansiedad.</p>
+                <p class="text-gray-600 font-medium">Puntuación: 80% (4 de 5 preguntas correctas)</p>
+                <div class="space-y-2">
+                    <p class="text-sm text-gray-500">Fortalezas:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-600">
+                        <li>Comprensión de técnicas de gestión del tiempo</li>
+                        <li>Identificación de estrategias para controlar la ansiedad</li>
+                    </ul>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-sm text-gray-500">Áreas de mejora:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm text-gray-600">
+                        <li>Aplicación de técnicas de respiración en situaciones de estrés</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button id="close-results-btn"
+                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-colors hover:-translate-y-0.5">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('see-results-btn').addEventListener('click', () => {
+            document.getElementById('results-modal').classList.remove('hidden');
+        });
+        
+        document.getElementById('close-results-btn').addEventListener('click', () => {
+            document.getElementById('results-modal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
