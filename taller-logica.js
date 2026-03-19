@@ -1,5 +1,6 @@
 // taller-logica.js
 import { saveWorkshopResults } from "./workshop-storage.js";
+import { progressManager } from "./scripts/progress-manager.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const studentModal = document.getElementById('student-modal');
@@ -177,8 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
         finishBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Guardando...';
 
         const result = await saveWorkshopResults('Logica Matemática', userAnswers, correctAnswersArray);
-
+        
         if (result && result.success) {
+            // Mark workshop as complete in progress manager
+            progressManager.markWorkshopComplete('logica');
             const fbWarning = result.firebaseSuccess ? '' : '<p class="text-xs text-orange-600 mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Nota guardada localmente y enviada por correo (Servidor inactivo).</p>';
             submitPanel.innerHTML = `
                 <div class="text-emerald-500 text-6xl mb-4"><i class="fa-solid fa-clipboard-check"></i></div>

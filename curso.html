@@ -63,20 +63,49 @@
 
         <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             <aside class="xl:col-span-4 bg-white rounded-3xl border border-gray-200 shadow-sm p-4 sm:p-5 h-fit">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Tu Progreso</span>
+                        <span id="overall-progress-text" class="text-xs font-bold text-emerald-600">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden border border-gray-200">
+                        <div id="overall-progress-bar" class="bg-emerald-500 h-full transition-all duration-500 w-0"></div>
+                    </div>
+                </div>
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-bold text-gray-900">Ruta de clases</h3>
                     <span id="class-counter" class="text-xs font-semibold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">0/10</span>
                 </div>
-                <div id="class-list" class="space-y-2"></div>
+                <div id="class-list" class="space-y-2 mb-8"></div>
+
+                <!-- Formation Tips Widget -->
+                <div class="bg-emerald-900 rounded-2xl p-5 text-white shadow-lg overflow-hidden relative group">
+                    <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-800 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-lightbulb text-emerald-400"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-200">Tip de Formación</span>
+                        </div>
+                        <p id="formation-tip-text" class="text-xs font-medium leading-relaxed italic">
+                            "La inteligencia no es solo saber cosas, es saber cómo usarlas para resolver problemas nuevos."
+                        </p>
+                    </div>
+                </div>
             </aside>
 
             <div class="xl:col-span-8 space-y-6">
                 <article class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-5 border-b border-gray-100">
-                        <p id="class-module" class="text-emerald-700 text-xs uppercase tracking-widest font-bold"></p>
-                        <h3 id="class-title" class="text-2xl font-bold text-gray-900 mt-1"></h3>
-                        <p id="class-description" class="text-gray-600 mt-2"></p>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <p id="class-module" class="text-emerald-700 text-xs uppercase tracking-widest font-bold"></p>
+                            <h3 id="class-title" class="text-2xl font-bold text-gray-900 mt-1"></h3>
+                        </div>
+                        <button id="mark-complete-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all border-2">
+                            <i id="complete-icon" class="fa-regular fa-circle-check"></i>
+                            <span id="complete-text">Marcar como vista</span>
+                        </button>
                     </div>
+                    <p id="class-description" class="text-gray-600 mt-3"></p>
                     <div class="aspect-video bg-gray-100">
                         <iframe
                             id="course-video"
@@ -112,7 +141,9 @@
         </section>
     </main>
 
-    <script>
+    <script type="module">
+        import { progressManager } from "./scripts/progress-manager.js";
+
         const COURSE_CLASSES = [
             { number: 1, module: 'Estrategia', title: 'Fundamentos de estrategia para examen UdeA', description: 'Planificacion, control de tiempo y metodologias de alto rendimiento.', videoId: 'Se3e_Wc-uys', pdf: 'assets/pdfs/clase-01.pdf' },
             { number: 2, module: 'Matematicas', title: 'Razonamiento numerico y proporcionalidad', description: 'Porcentajes, regla de tres y problemas de aplicacion rapida.', videoId: 'ms4gNkD9LgY', pdf: 'assets/pdfs/clase-02.pdf' },
@@ -177,46 +208,66 @@
             }));
         }
 
-        function setClass(index) {
-            currentIndex = index;
-            const courseClass = COURSE_CLASSES[index];
+        function updateProgressUI() {
+            const percentage = progressManager.getCompletionPercentage();
+            const bar = document.getElementById('overall-progress-bar');
+            const text = document.getElementById('overall-progress-text');
+            if (bar) bar.style.width = `${percentage}%`;
+            if (text) text.textContent = `${percentage}%`;
 
-            localStorage.setItem('vetprep_current_class', String(courseClass.number));
-
-            classCounter.textContent = `${courseClass.number}/10`;
-            classModule.textContent = `Clase ${courseClass.number} · ${courseClass.module}`;
-            classTitle.textContent = courseClass.title;
-            classDescription.textContent = courseClass.description;
-
-            const videoSrc = `https://www.youtube-nocookie.com/embed/${courseClass.videoId}`;
-            courseVideo.src = videoSrc;
-
-            const pdfSrc = `${courseClass.pdf}#view=FitH`;
-            coursePdfObject.setAttribute('data', pdfSrc);
-            coursePdfIframe.setAttribute('src', pdfSrc);
-
-            pdfTitle.textContent = `Guia PDF - Clase ${courseClass.number}`;
-            openPdfTop.href = courseClass.pdf;
-            openPdfBottom.href = courseClass.pdf;
-            pdfCard.setAttribute('data-material-title', `Clase ${courseClass.number}: ${courseClass.title}`);
-
-            Array.from(classList.querySelectorAll('button')).forEach((btn, idx) => {
-                if (idx === index) {
-                    btn.className = 'w-full text-left px-4 py-3 rounded-2xl border border-emerald-400 bg-emerald-50 text-emerald-900 shadow-sm transition-colors';
-                } else {
-                    btn.className = 'w-full text-left px-4 py-3 rounded-2xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-colors';
+            // Update sidebar buttons checkmarks
+            COURSE_CLASSES.forEach((courseClass, index) => {
+                const btn = classList.children[index];
+                if (btn) {
+                    const isComplete = progressManager.isClassComplete(courseClass.number);
+                    const flexContainer = btn.querySelector('div.flex');
+                    const checkIcon = btn.querySelector('.fa-circle-check');
+                    if (isComplete && !checkIcon && flexContainer) {
+                        const icon = document.createElement('i');
+                        icon.className = 'fa-solid fa-circle-check text-emerald-500 ml-auto';
+                        flexContainer.appendChild(icon);
+                    } else if (!isComplete && checkIcon) {
+                        checkIcon.remove();
+                    }
                 }
             });
 
-            dispatchClassChange(courseClass);
+            // Update main button
+            const currentClassNum = COURSE_CLASSES[currentIndex].number;
+            const isCurrentComplete = progressManager.isClassComplete(currentClassNum);
+            const markBtn = document.getElementById('mark-complete-btn');
+            const markIcon = document.getElementById('complete-icon');
+            const markText = document.getElementById('complete-text');
+
+            if (isCurrentComplete) {
+                markBtn.className = 'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all bg-emerald-100 text-emerald-700 border-emerald-300';
+                markIcon.className = 'fa-solid fa-circle-check';
+                markText.textContent = 'Clase completada';
+            } else {
+                markBtn.className = 'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white text-gray-600 border-gray-200 hover:border-emerald-500 hover:text-emerald-600';
+                markIcon.className = 'fa-regular fa-circle-check';
+                markText.textContent = 'Marcar como vista';
+            }
         }
+
+        document.getElementById('mark-complete-btn').addEventListener('click', () => {
+            const currentClassNum = COURSE_CLASSES[currentIndex].number;
+            if (progressManager.isClassComplete(currentClassNum)) {
+                progressManager.markClassIncomplete(currentClassNum);
+            } else {
+                progressManager.markClassComplete(currentClassNum);
+            }
+            updateProgressUI();
+        });
+
+        window.addEventListener('educando866:progress_updated', updateProgressUI);
 
         function buildClassList() {
             classList.innerHTML = '';
             COURSE_CLASSES.forEach((courseClass, index) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.innerHTML = `<span class="block font-semibold">Clase ${courseClass.number}: ${courseClass.module}</span><span class="block text-xs opacity-80 mt-1">${courseClass.title}</span>`;
+                btn.innerHTML = `<div class="flex items-center justify-between w-full"><div class="text-left"><span class="block font-semibold">Clase ${courseClass.number}: ${courseClass.module}</span><span class="block text-xs opacity-80 mt-1">${courseClass.title}</span></div></div>`;
                 btn.addEventListener('click', () => setClass(index));
                 classList.appendChild(btn);
             });
@@ -241,9 +292,39 @@
             window.location.replace('index.html');
         });
 
+        const FORMATION_TIPS = [
+            "Active Recall: Intenta recordar los puntos clave de la clase antes de mirar tus apuntes.",
+            "Repetición Espaciada: Revisa este tema mañana, luego en 3 días, luego en una semana.",
+            "Pensamiento Racional: En el examen, identifica primero qué te están preguntando realmente antes de ver las opciones.",
+            "Gestión del Tiempo: Si una pregunta te toma más de 2 minutos, márcala y sigue adelante. Vuelve al final.",
+            "Eliminación Lógica: Siempre hay al menos dos opciones que puedes descartar por ser lógicamente inconsistentes.",
+            "Lectura Crítica: Identifica la intención del autor. ¿Está informando, persuadiendo o criticando?",
+            "Salud Mental: Un cerebro descansado rinde 40% más que uno agotado. Duerme 8 horas antes del simulacro.",
+            "Razonamiento: No busques la respuesta correcta, busca por qué las otras tres son incorrectas."
+        ];
+
+        let currentTipIndex = 0;
+        function rotateTips() {
+            const tipText = document.getElementById('formation-tip-text');
+            if (!tipText) return;
+            
+            tipText.style.opacity = '0';
+            setTimeout(() => {
+                currentTipIndex = (currentTipIndex + 1) % FORMATION_TIPS.length;
+                tipText.textContent = `"${FORMATION_TIPS[currentTipIndex]}"`;
+                tipText.style.opacity = '1';
+            }, 500);
+        }
+
+        setInterval(rotateTips, 8000);
+
         buildClassList();
         setClass(currentIndex);
+        updateProgressUI();
     </script>
+    <style>
+        #formation-tip-text { transition: opacity 0.5s ease-in-out; }
+    </style>
     <script type="module" src="./course-analytics.js"></script>
 </body>
 </html>
