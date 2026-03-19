@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prep Universitario | Aula Virtual Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+    <header class="bg-emerald-900 text-white border-b border-emerald-800 sticky top-0 z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
+            <div>
+                <p class="text-emerald-200 text-xs uppercase tracking-widest font-bold">Aula Virtual Premium</p>
+                <h1 class="text-xl sm:text-2xl font-bold">Prep Univeristario HenryStark</h1>
+                <p id="welcome-text" class="text-emerald-100 text-sm mt-1"></p>
+                <p id="student-badge" class="text-emerald-200 text-xs mt-1"></p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="px-4 py-2 rounded-full text-sm font-semibold bg-white/10 hover:bg-white/20 transition-colors">Inicio</a>
+                <button id="logout-btn" class="px-4 py-2 rounded-full text-sm font-semibold bg-red-600 hover:bg-red-500 transition-colors">
+                    Cerrar sesion
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+        <section class="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 sm:p-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Curso completo: 10 clases</h2>
+                    <p class="text-gray-600">Contenido premium con video, guia PDF por clase y banco de preguntas por nivel.</p>
+                </div>
+                <span class="inline-flex items-center px-4 py-2 rounded-full bg-emerald-100 text-emerald-800 font-semibold text-sm">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>
+                    10 clases activas
+                </span>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <aside class="xl:col-span-4 bg-white rounded-3xl border border-gray-200 shadow-sm p-4 sm:p-5 h-fit">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">Ruta de clases</h3>
+                    <span id="class-counter" class="text-xs font-semibold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">0/10</span>
+                </div>
+                <div id="class-list" class="space-y-2"></div>
+            </aside>
+
+            <div class="xl:col-span-8 space-y-6">
+                <article class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-gray-100">
+                        <p id="class-module" class="text-emerald-700 text-xs uppercase tracking-widest font-bold"></p>
+                        <h3 id="class-title" class="text-2xl font-bold text-gray-900 mt-1"></h3>
+                        <p id="class-description" class="text-gray-600 mt-2"></p>
+                    </div>
+                    <div class="aspect-video bg-gray-100">
+                        <iframe
+                            id="course-video"
+                            class="w-full h-full"
+                            src=""
+                            title="Clase en video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                            loading="lazy"></iframe>
+                    </div>
+                </article>
+
+                <article class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden" data-material-title="">
+                    <div class="p-5 border-b border-gray-100 flex items-center justify-between gap-4">
+                        <div>
+                            <h4 id="pdf-title" class="font-bold text-gray-900 text-lg"></h4>
+                            <p class="text-sm text-gray-500">Material oficial Prep Universitario HenryStark, compatible con navegadores modernos</p>
+                        </div>
+                        <a id="open-pdf-top" class="js-pdf-open text-sm font-semibold text-emerald-700 hover:text-emerald-600" href="#" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
+                    </div>
+                    <div class="h-[520px] bg-gray-100">
+                        <object id="course-pdf-object" class="w-full h-full" data="" type="application/pdf">
+                            <iframe id="course-pdf-iframe" class="w-full h-full" src="" title="PDF de la clase" loading="lazy"></iframe>
+                        </object>
+                    </div>
+                    <div class="px-5 py-3 border-t border-gray-100 bg-gray-50 text-xs text-gray-600 flex items-center justify-between">
+                        <span>Si tu navegador no permite vista embebida, usa "Abrir PDF".</span>
+                        <a id="open-pdf-bottom" class="js-pdf-open text-emerald-700 font-semibold" href="#" target="_blank" rel="noopener noreferrer">Abrir PDF</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const COURSE_CLASSES = [
+            { number: 1, module: 'Estrategia', title: 'Fundamentos de estrategia para examen UdeA', description: 'Planificacion, control de tiempo y metodologias de alto rendimiento.', videoId: 'Se3e_Wc-uys', pdf: 'assets/pdfs/clase-01.pdf' },
+            { number: 2, module: 'Matematicas', title: 'Razonamiento numerico y proporcionalidad', description: 'Porcentajes, regla de tres y problemas de aplicacion rapida.', videoId: 'ms4gNkD9LgY', pdf: 'assets/pdfs/clase-02.pdf' },
+            { number: 3, module: 'Logica', title: 'Secuencias, patrones y logica formal', description: 'Series, conectores logicos y preguntas tipo admision.', videoId: '9IVFfXv5gt0', pdf: 'assets/pdfs/clase-03.pdf' },
+            { number: 4, module: 'Lectura critica', title: 'Lectura critica I: idea central e inferencias', description: 'Comprension profunda de textos y seleccion de evidencia.', videoId: 'l7KlSvZv38g', pdf: 'assets/pdfs/clase-04.pdf' },
+            { number: 5, module: 'Lectura critica', title: 'Lectura critica II: vocabulario y estructura', description: 'Vocabulario contextual y estructura argumentativa.', videoId: 'l7KlSvZv38g&t=15s', pdf: 'assets/pdfs/clase-05.pdf' },
+            { number: 6, module: 'Biologia', title: 'Biologia aplicada para admision', description: 'Celula, genetica y sistemas biologicos en contexto.', videoId: 'OSkGQR4Sh_A', pdf: 'assets/pdfs/clase-06.pdf' },
+            { number: 7, module: 'Quimica', title: 'Quimica esencial: atomo, enlace y reaccion', description: 'Quimica basica orientada a preguntas frecuentes UdeA.', videoId: 'B-njd_ELxck', pdf: 'assets/pdfs/clase-07.pdf' },
+            { number: 8, module: 'Fisica', title: 'Fisica base: movimiento y fuerza', description: 'Kinematica, dinamica y lectura de graficas.', videoId: 'D8o7VZlKVjI', pdf: 'assets/pdfs/clase-08.pdf' },
+            { number: 9, module: 'Matematicas', title: 'Matematica avanzada: algebra y funciones', description: 'Ecuaciones, factorizacion y funciones para alto puntaje.', videoId: 'AXrmfpvQNko', pdf: 'assets/pdfs/clase-09.pdf' },
+            { number: 10, module: 'Cierre', title: 'Simulacro final integrador y plan de cierre', description: 'Simulacro completo y plan final previo al examen.', videoId: 'kM_v-5MZe5U', pdf: 'assets/pdfs/clase-10.pdf' }
+        ];
+
+        const studentLoggedIn = localStorage.getItem('vetprep_student_logged_in') === 'true';
+        const studentName = localStorage.getItem('vetprep_student_name') || 'Estudiante';
+        const studentEmail = localStorage.getItem('vetprep_student_email') || '';
+        const studentRole = localStorage.getItem('vetprep_student_role') || 'estudiante';
+        const studentPlan = localStorage.getItem('vetprep_student_plan') || 'Plan general';
+        const studentId = localStorage.getItem('vetprep_student_id') || '';
+
+        if (!studentLoggedIn) {
+            window.location.replace('index.html');
+        }
+
+        document.getElementById('welcome-text').textContent = `${studentName} ${studentEmail ? `(${studentEmail})` : ''}`;
+        document.getElementById('student-badge').textContent = studentRole === 'becado'
+            ? `Perfil becado · ${studentPlan}${studentId ? ` · CC ${studentId}` : ''}`
+            : `Perfil estudiante · ${studentPlan}`;
+
+        const classList = document.getElementById('class-list');
+        const classCounter = document.getElementById('class-counter');
+        const classModule = document.getElementById('class-module');
+        const classTitle = document.getElementById('class-title');
+        const classDescription = document.getElementById('class-description');
+        const courseVideo = document.getElementById('course-video');
+        const coursePdfObject = document.getElementById('course-pdf-object');
+        const coursePdfIframe = document.getElementById('course-pdf-iframe');
+        const pdfTitle = document.getElementById('pdf-title');
+        const openPdfTop = document.getElementById('open-pdf-top');
+        const openPdfBottom = document.getElementById('open-pdf-bottom');
+        const pdfCard = document.querySelector('[data-material-title]');
+
+        const savedClass = Number(localStorage.getItem('vetprep_current_class') || '1');
+        let currentIndex = Number.isNaN(savedClass) ? 0 : Math.min(Math.max(savedClass - 1, 0), COURSE_CLASSES.length - 1);
+
+        function dispatchClassChange(courseClass) {
+            window.dispatchEvent(new CustomEvent('vetprep:class_change', {
+                detail: {
+                    classNumber: courseClass.number,
+                    title: courseClass.title,
+                    module: courseClass.module
+                }
+            }));
+        }
+
+        function dispatchPdfOpen(courseClass) {
+            window.dispatchEvent(new CustomEvent('vetprep:pdf_open', {
+                detail: {
+                    title: `Clase ${courseClass.number}: ${courseClass.title}`,
+                    href: courseClass.pdf
+                }
+            }));
+        }
+
+        function setClass(index) {
+            currentIndex = index;
+            const courseClass = COURSE_CLASSES[index];
+
+            localStorage.setItem('vetprep_current_class', String(courseClass.number));
+
+            classCounter.textContent = `${courseClass.number}/10`;
+            classModule.textContent = `Clase ${courseClass.number} · ${courseClass.module}`;
+            classTitle.textContent = courseClass.title;
+            classDescription.textContent = courseClass.description;
+
+            const videoSrc = `https://www.youtube-nocookie.com/embed/${courseClass.videoId}`;
+            courseVideo.src = videoSrc;
+
+            const pdfSrc = `${courseClass.pdf}#view=FitH`;
+            coursePdfObject.setAttribute('data', pdfSrc);
+            coursePdfIframe.setAttribute('src', pdfSrc);
+
+            pdfTitle.textContent = `Guia PDF - Clase ${courseClass.number}`;
+            openPdfTop.href = courseClass.pdf;
+            openPdfBottom.href = courseClass.pdf;
+            pdfCard.setAttribute('data-material-title', `Clase ${courseClass.number}: ${courseClass.title}`);
+
+            Array.from(classList.querySelectorAll('button')).forEach((btn, idx) => {
+                if (idx === index) {
+                    btn.className = 'w-full text-left px-4 py-3 rounded-2xl border border-emerald-400 bg-emerald-50 text-emerald-900 shadow-sm transition-colors';
+                } else {
+                    btn.className = 'w-full text-left px-4 py-3 rounded-2xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-colors';
+                }
+            });
+
+            dispatchClassChange(courseClass);
+        }
+
+        function buildClassList() {
+            classList.innerHTML = '';
+            COURSE_CLASSES.forEach((courseClass, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.innerHTML = `<span class="block font-semibold">Clase ${courseClass.number}: ${courseClass.module}</span><span class="block text-xs opacity-80 mt-1">${courseClass.title}</span>`;
+                btn.addEventListener('click', () => setClass(index));
+                classList.appendChild(btn);
+            });
+        }
+
+        [openPdfTop, openPdfBottom].forEach((link) => {
+            link.addEventListener('click', () => {
+                dispatchPdfOpen(COURSE_CLASSES[currentIndex]);
+            });
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('vetprep_student_logged_in');
+            localStorage.removeItem('vetprep_student_name');
+            localStorage.removeItem('vetprep_student_email');
+            localStorage.removeItem('vetprep_student_id');
+            localStorage.removeItem('vetprep_student_access_code');
+            localStorage.removeItem('vetprep_student_role');
+            localStorage.removeItem('vetprep_student_plan');
+            localStorage.removeItem('vetprep_student_status');
+            localStorage.removeItem('vetprep_current_class');
+            window.location.replace('index.html');
+        });
+
+        buildClassList();
+        setClass(currentIndex);
+    </script>
+    <script type="module" src="./course-analytics.js"></script>
+</body>
+</html>
