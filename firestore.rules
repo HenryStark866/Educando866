@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Colección de perfiles de estudiantes
+    match /estudiantes/{docId} {
+      allow read: if isAuthenticated() && (request.auth.uid == docId || isAdmin());
+      allow create, update: if isAuthenticated() && request.auth.uid == docId;
+      allow delete: if false;
+    }
+    
+    // Colección de resultados de talleres
+    match /talleres_resultados/{docId} {
+      allow read: if isAuthenticated() && isOwnerOrAdmin(resource.data);
+      allow create: if isAuthenticated() && validateWorkshopData(request.resource.data);
+      allow update, delete: if false; // Solo lectura y creación
+    }
+    
+    // Colección de notificaciones por correo
+    match /mail_notifications/{docId} {
+      allow read: if isAuthenticated() && isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+    
+    // Colección de actividad del curso
+    match /course_activity/{docId} {
+      allow read: if isAuthenticated() && (isOwnerOrAdmin(resource.data) || isAdmin());
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+    
+    // Funciones helper
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return request.auth.token.admin == true || 
+             request.auth.token.email.matches('.*henry\\.taborda866@pascualbravo\\.edu\\.co.*');
+    }
+    
+    function isOwnerOrAdmin(data) {
+      return isAdmin() || 
+             (request.auth.token.email == data.student.email);
+    }
+    
+    function validateWorkshopData(data) {
+      // Validar estructura básica
+      return data.student is map &&
+             data.student.hasAll(['name', 'email']) &&
+             data.workshopType is string &&
+             data.score is map &&
+             data.score.hasAll(['raw', 'totalQuestions', 'final']) &&
+             data.score.raw is int &&
+             data.score.totalQuestions is int &&
+             data.score.final is float &&
+             data.score.raw >= 0 &&
+             data.score.raw <= data.score.totalQuestions &&
+             data.score.final >= 0.0 &&
+             data.score.final <= 100.0 &&
+             data.createdAt is timestamp &&
+             data.deviceUserAgent is string;
+    }
+  }
+}

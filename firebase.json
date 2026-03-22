@@ -1,0 +1,8 @@
+{
+  "firestore": {
+    "database": "prep-curso-uni",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

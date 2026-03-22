@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educando866 - Simulacro Global UdeA</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { emerald: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 900: '#064e3b' } },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .option-radio:checked + div { border-color: #10b981; background-color: #ecfdf5; }
+        .option-radio:checked + div .indicator { background-color: #10b981; color: white; border-color: #10b981; }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <header class="bg-gray-900 border-b-4 border-emerald-600 shadow-xl z-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="curso.html" class="text-gray-400 hover:text-white transition-colors mr-2">
+                    <i class="fa-solid fa-arrow-left text-xl"></i>
+                </a>
+                <i class="fa-solid fa-graduation-cap text-emerald-400 text-3xl"></i>
+                <div>
+                    <h1 class="font-bold text-xl tracking-tight text-white leading-tight">Simulacro Global de Admisión</h1>
+                    <p class="text-xs text-emerald-400 uppercase tracking-widest font-bold flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span> Formato Oficial UdeA (Lectura + Lógica)
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-black/50 border border-emerald-800 rounded-xl px-5 py-2.5 flex items-center gap-3 shadow-inner">
+                <i class="fa-regular fa-clock text-emerald-400 text-xl animate-pulse"></i>
+                <div id="countdown-timer" class="text-white font-mono text-2xl font-bold tracking-widest">03:00:00</div>
+            </div>
+        </div>
+    </header>
+
+    <div id="student-modal" class="fixed inset-0 z-50 bg-gray-900/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100 p-8">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Prueba de Alta Tensión</h2>
+                <p class="text-gray-500 mt-2 text-sm leading-relaxed">Estás a punto de iniciar el Simulacro Global. Esta prueba emula con precisión neuro-cognitiva la dificultad del examen real de la Universidad de Antioquia.</p>
+            </div>
+            
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-xl">
+                <h3 class="font-bold text-red-800 text-sm mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Instrucciones Críticas:</h3>
+                <ul class="text-xs text-red-700 space-y-1.5 list-disc pl-4 font-medium">
+                    <li>La prueba consta de <b>80 preguntas</b> en total.</li>
+                    <li>40 Competencia Lectora / 40 Razonamiento Lógico.</li>
+                    <li>Tiempo límite estricto: <b>3 Horas (180 minutos)</b>.</li>
+                    <li>No puedes pausar el reloj una vez iniciado.</li>
+                </ul>
+            </div>
+
+            <button id="start-exam-btn" class="w-full bg-gray-900 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all transform hover:-translate-y-1 text-lg">
+                <i class="fa-solid fa-play mr-2"></i> Iniciar Simulacro
+            </button>
+        </div>
+    </div>
+
+    <!-- Layout Dividido (Textos Izquierda, Preguntas Derecha) -->
+    <main class="flex-grow max-w-[1600px] mx-auto w-full relative flex flex-col lg:flex-row hidden bg-white shadow-2xl" id="main-ui">
+        
+        <!-- Panel Izquierdo: Material de Lectura / Fórmulas -->
+        <div class="w-full lg:w-5/12 p-6 lg:p-10 lg:h-[calc(100vh-85px)] overflow-y-auto lg:sticky lg:top-0 border-r border-gray-200 z-10 custom-scrollbar bg-slate-50 relative">
+            
+            <!-- Tabs del Material -->
+            <div class="flex gap-2 mb-6 border-b border-gray-300 pb-2 sticky top-0 bg-slate-50 pt-2 z-20">
+                <button class="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-sm"><i class="fa-solid fa-book-open"></i> Textos</button>
+                <button class="px-4 py-2 bg-gray-200 text-gray-600 hover:bg-gray-300 rounded-lg text-sm font-bold transition-colors"><i class="fa-solid fa-square-root-variable"></i> Fórmulas Lógicas</button>
+            </div>
+
+            <div class="max-w-xl mx-auto space-y-12 pb-20">
+                <!-- Texto 1 -->
+                <article>
+                    <span class="inline-block py-1 px-3 bg-sky-100 text-sky-800 text-[10px] font-bold uppercase tracking-widest rounded-md mb-3 border border-sky-200">Preguntas 1 - 20</span>
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-4 leading-tight">La Inteligencia Artificial y la Singularidad</h2>
+                    <div class="prose prose-sm prose-sky text-gray-700 text-justify leading-relaxed">
+                        <p>La presunción de que el intelecto humano representa el ápice cognitivo del universo conocido es, desde un punto de vista evolutivo, una arrogancia temporal. La aceleración tecnológica descrita por Kurzweil plantea la inminencia de la 'Singularidad': el momento hipotético en que la inteligencia artificial superará la capacidad intelectual humana colectiva.</p>
+                        <p>A diferencia de la inteligencia biológica, restringida por el tamaño del cráneo y la velocidad de conducción nerviosa, los sistemas neuromórficos artificiales operan a velocidades cercanas a la de la luz y pueden escalar agregando hardware casi infinitamente. El verdadero peligro no reside, como postula el cine de ciencia ficción, en la malevolencia consciente de las máquinas, sino en la "ortogonalidad" de sus objetivos. Si una superinteligencia es programada para fabricar clips de papel, la conversión de toda la materia terrestre en clips no sería un acto de odio, sino de optimización glacialmente eficiente.</p>
+                    </div>
+                </article>
+
+                <!-- Área de Lógica -->
+                <article class="pt-8 border-t-2 border-dashed border-gray-300">
+                    <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-widest rounded-md mb-3 border border-emerald-200">Sección Matemática</span>
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-4 leading-tight">Postulados Visuales y Espaciales</h2>
+                    <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm text-sm text-gray-600 italic text-center">
+                        Para las preguntas 41 a 80, emplea únicamente tu razonamiento matemático y el papel borrador. Presta especial atención a las series geométricas y la proporcionalidad inversa.
+                    </div>
+                </article>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-slate-50 to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Panel Derecho: Cuestionario -->
+        <div class="w-full lg:w-7/12 p-4 sm:p-6 lg:p-10 bg-white lg:h-[calc(100vh-85px)] overflow-y-auto custom-scrollbar relative">
+            <div class="mb-6 flex justify-between items-end border-b border-gray-100 pb-4 sticky top-0 bg-white z-20 pt-2">
+                <h3 class="text-2xl font-bold text-gray-900">Hoja de Respuestas</h3>
+                <span class="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full"><span id="answered-count">0</span>/80 Respondidas</span>
+            </div>
+
+            <div id="questions-container" class="space-y-8 max-w-3xl mx-auto">
+                <!-- Inyectado por JS -->
+            </div>
+
+            <div id="submit-panel" class="mt-16 bg-gray-900 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-8 sm:p-10 border border-gray-800 text-center relative overflow-hidden mb-10">
+                <h3 class="text-2xl font-extrabold text-white mb-2 relative z-10">Finalizar Simulacro</h3>
+                <p class="text-gray-400 mb-8 max-w-md mx-auto text-sm relative z-10">Revisa bien tus respuestas. El puntaje se registrará en tu Dashboard de Analíticas y determinará tu ruta de estudio sugerida.</p>
+                <button id="finish-exam-btn" class="bg-emerald-500 hover:bg-emerald-400 text-gray-900 text-lg font-bold py-4 px-12 rounded-2xl transition-all shadow-xl hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transform hover:-translate-y-1 relative z-10 w-full sm:w-auto">
+                    Entregar y Calificar
+                </button>
+                <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500 blur-[100px] opacity-20"></div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="./simulacro-global.js"></script>
+</body>
+</html>

@@ -1,114 +1,43 @@
-import { db } from "./firebase-config.js";
-import { addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+// course-analytics.js
 
-const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
+document.addEventListener('DOMContentLoaded', () => {
+    // Read from localStorage (saved by simulacro-global.js)
+    const lecScore = parseInt(localStorage.getItem('simulacro_lectura')) || 0;
+    const logScore = parseInt(localStorage.getItem('simulacro_logica')) || 0;
+    const totalScore = parseInt(localStorage.getItem('simulacro_total')) || 0;
 
-const studentName = localStorage.getItem("vetprep_student_name") || "Estudiante";
-const studentEmail = localStorage.getItem("vetprep_student_email") || "N/A";
+    const elStatLec = document.getElementById('stat-lectura');
+    const elBarLec = document.getElementById('bar-lectura');
+    const elStatLog = document.getElementById('stat-logica');
+    const elBarLog = document.getElementById('bar-logica');
+    const recText = document.getElementById('ia-recommendation');
 
-async function withTimeout(promise, ms, label) {
-    return Promise.race([
-        promise,
-        new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout:${label}`)), ms))
-    ]);
-}
+    if (lecScore > 0 || logScore > 0) {
+        // Update bars
+        setTimeout(() => {
+            elStatLec.textContent = lecScore + '%';
+            elBarLec.style.width = lecScore + '%';
+            
+            elStatLog.textContent = logScore + '%';
+            elBarLog.style.width = logScore + '%';
+        }, 500);
 
-async function sendAdminEmail(subject, lines) {
-    const payload = {
-        _subject: subject,
-        _replyto: studentEmail !== "N/A" ? studentEmail : undefined,
-        _captcha: "false",
-        _template: "table",
-        estudiante: studentName,
-        correo_estudiante: studentEmail,
-        mensaje: lines.join("\n")
-    };
-
-    try {
-        await withTimeout(addDoc(collection(db, "mail_notifications"), {
-            channel: "formsubmit",
-            to: ADMIN_NOTIFICATION_EMAIL,
-            subject,
-            student: {
-                name: studentName,
-                email: studentEmail
-            },
-            createdAt: serverTimestamp(),
-            status: "attempted"
-        }), 7000, "mail_notifications");
-
-        await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-    } catch (error) {
-        console.error("No se pudo enviar notificacion por correo:", error);
+        // Simple IA recommendation logic based on difference
+        if (lecScore < 50 && logScore < 50) {
+            recText.innerHTML = "Prioridad Crítica: Fundamentos.<br><span class='font-normal text-xs text-gray-300'>Vuelve a los módulos 1 al 4 inmediatamente.</span>";
+            recText.className = "text-sm font-bold text-red-400 mt-1 leading-tight";
+        } else if (lecScore >= 80 && logScore >= 80) {
+            recText.innerHTML = "¡Nivel de Admisión Alcanzado!<br><span class='font-normal text-xs text-emerald-200'>Mantén la práctica constante de simulacros.</span>";
+            recText.className = "text-sm font-bold text-emerald-400 mt-1 leading-tight";
+        } else if (lecScore > logScore + 20) {
+            recText.innerHTML = "Alerta: Desbalance Lógico.<br><span class='font-normal text-xs text-sky-200'>Tu lectura nos salvará, pero necesitas fortalecer 'Proporcionalidad Inversa'.</span>";
+            recText.className = "text-sm font-bold text-sky-400 mt-1 leading-tight";
+        } else if (logScore > lecScore + 20) {
+            recText.innerHTML = "Alerta: Desbalance Lector.<br><span class='font-normal text-xs text-emerald-200'>Cálculo excelente, pero las inferencias de texto te están costando puntos.</span>";
+            recText.className = "text-sm font-bold text-emerald-400 mt-1 leading-tight";
+        } else {
+            recText.innerHTML = "Rendimiento Equilibrado.<br><span class='font-normal text-xs text-gray-300'>Trata de aumentar un 10% en ambas áreas la próxima semana.</span>";
+            recText.className = "text-sm font-bold text-yellow-400 mt-1 leading-tight";
+        }
     }
-}
-
-async function logCourseEvent(eventType, details = {}) {
-    const eventData = {
-        eventType,
-        student: {
-            name: studentName,
-            email: studentEmail
-        },
-        details,
-        createdAt: serverTimestamp(),
-        userAgent: navigator.userAgent,
-        path: window.location.pathname
-    };
-
-    try {
-        await withTimeout(addDoc(collection(db, "course_activity"), eventData), 7000, "course_activity");
-    } catch (error) {
-        console.error("No se pudo guardar evento en Firestore:", error);
-    }
-}
-
-const sessionAccessKey = "vetprep_course_access_logged";
-if (!sessionStorage.getItem(sessionAccessKey)) {
-    sessionStorage.setItem(sessionAccessKey, "true");
-    logCourseEvent("course_access", {
-        message: "Ingreso al aula virtual"
-    });
-    sendAdminEmail("Nuevo ingreso al aula virtual", [
-        `Estudiante: ${studentName}`,
-        `Correo: ${studentEmail}`,
-        "Evento: Ingreso al aula virtual"
-    ]);
-}
-
-window.addEventListener("vetprep:pdf_open", (event) => {
-    const title = event.detail?.title || "Material PDF";
-    const href = event.detail?.href || "N/A";
-
-    logCourseEvent("pdf_open", {
-        title,
-        href
-    });
-
-    sendAdminEmail("Apertura de PDF en aula virtual", [
-        `Estudiante: ${studentName}`,
-        `Correo: ${studentEmail}`,
-        `Evento: Apertura de PDF`,
-        `Material: ${title}`,
-        `Archivo: ${href}`
-    ]);
-});
-
-window.addEventListener("vetprep:class_change", (event) => {
-    const classNumber = event.detail?.classNumber || "N/A";
-    const title = event.detail?.title || "Clase";
-    const module = event.detail?.module || "General";
-
-    logCourseEvent("class_change", {
-        classNumber,
-        title,
-        module
-    });
 });

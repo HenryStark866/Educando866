@@ -1,0 +1,29 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Simulacro Global UdeA (80 preguntas, 3 horas)",
+      "status": "PENDING",
+      "plan_approved": false,
+      "assigned_to": "Frontend",
+      "dependencies": []
+    },
+    {
+      "id": 2,
+      "title": "Dashboard de Anal\u00edticas (Fortalezas y Debilidades)",
+      "status": "PENDING",
+      "plan_approved": false,
+      "assigned_to": "Frontend_y_BD",
+      "dependencies": []
+    },
+    {
+      "id": 3,
+      "title": "Actualizaci\u00f3n Profe IA (L\u00f3gica de Tutor\u00eda Avanzada)",
+      "status": "PENDING",
+      "plan_approved": false,
+      "assigned_to": "Arquitecto_AI",
+      "dependencies": []
+    }
+  ],
+  "members": []
+}
