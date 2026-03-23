@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialization
     function init() {
         // Auto-fill if returning user
-        if (localStorage.getItem('vetprep_student_name')) {
-            nameInput.value = localStorage.getItem('vetprep_student_name');
-            emailInput.value = localStorage.getItem('vetprep_student_email');
+        if (localStorage.getItem('educando866_student_name')) {
+            nameInput.value = localStorage.getItem('educando866_student_name');
+            emailInput.value = localStorage.getItem('educando866_student_email');
         }
     }
 
@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         // Save user state
-        localStorage.setItem('vetprep_student_name', nameInput.value.trim());
-        localStorage.setItem('vetprep_student_email', emailInput.value.trim());
+        localStorage.setItem('educando866_student_name', nameInput.value.trim());
+        localStorage.setItem('educando866_student_email', emailInput.value.trim());
         
         // Hide modal, show UI
         studentModal.classList.add('hidden');

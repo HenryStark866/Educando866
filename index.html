@@ -547,7 +547,7 @@
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const appVersion = '1.1.002-IO';
-        const cacheKey = 'vetprep_app_version';
+        const cacheKey = 'educando866_app_version';
         const hasVersionInUrl = new URLSearchParams(window.location.search).has('v');
         if (localStorage.getItem(cacheKey) !== appVersion && !hasVersionInUrl) {
             localStorage.setItem(cacheKey, appVersion);
@@ -568,8 +568,8 @@
                 fullName: 'Nicolas Garzon Arteaga',
                 idNumber: '1032097855',
                 accessCode: 'BEC-0001-NGA',
-                emailAlias: 'nicolas.garzon.1032097855@vetprep-clientes.local',
-                plan: 'Becado VetPrep 2026',
+                emailAlias: 'nicolas.garzon.1032097855@educando866-clientes.local',
+                plan: 'Becado Educando866 2026',
                 status: 'activo'
             }
         ];
@@ -610,6 +610,7 @@
                     const userCred = await signInWithEmailAndPassword(auth, email, password);
                     const pagado = await verificarPago(userCred.user.uid);
                     if (pagado) {
+                        localStorage.setItem('educando866_student_logged_in', 'true');
                         window.location.href = 'curso.html';
                     } else {
                         studentLoginError.textContent = 'Tu pago aún está en proceso. Escríbenos para activar tu acceso.';

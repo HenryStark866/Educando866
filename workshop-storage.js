@@ -1,5 +1,5 @@
 // workshop-storage.js
-import { db } from "./firebase-config.js";
+import { db, auth } from "./firebase-config.js";
 import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const ADMIN_NOTIFICATION_EMAIL = "henrytaborda866@pascualbravo.edu.co";
@@ -34,15 +34,18 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
     }
 
     // Puntaje simulado sobre 100
-    const finalScore = ((rawScore / totalQuestions) * 100).toFixed(2);
+    const finalScore = parseFloat(((rawScore / totalQuestions) * 100).toFixed(2));
 
-    // Obtener datos del estudiante almacenados localmente
-    const studentName = localStorage.getItem('vetprep_student_name') || 'Anónimo';
-    const studentEmail = localStorage.getItem('vetprep_student_email') || 'N/A';
+    // Obtener datos del estudiante (Prioridad Auth -> LocalStorage)
+    const currentUser = auth ? auth.currentUser : null;
+    const studentName = currentUser?.displayName || localStorage.getItem('educando866_student_name') || 'Anónimo';
+    const studentEmail = currentUser?.email || localStorage.getItem('educando866_student_email') || 'anonimo@anonimo.com';
+    const uid = currentUser?.uid || 'guest';
     
     // Almacenamiento del documento
     const workshopData = {
         student: {
+            uid: uid,
             name: studentName,
             email: studentEmail
         },
@@ -50,7 +53,7 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
         score: {
             raw: rawScore,
             totalQuestions: totalQuestions,
-            final: parseFloat(finalScore)
+            final: finalScore
         },
         createdAt: serverTimestamp(),
         deviceUserAgent: navigator.userAgent
@@ -59,25 +62,23 @@ export async function saveWorkshopResults(workshopType, userAnswers, correctAnsw
     let docId = 'N/A';
     let firebaseSuccess = false;
 
-    // Firebase addDoc con timeout de 8 segundos para evitar que se quede pegado ("Guardando...")
+    // Firebase addDoc con timeout de 8 segundos
     try {
-        const addDocPromise = addDoc(collection(db, "talleres_resultados"), workshopData);
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout de Firebase")), 8000));
-        
-        const docRef = await Promise.race([addDocPromise, timeoutPromise]);
+        const docRef = await withTimeout(addDoc(collection(db, "talleres_resultados"), workshopData), 8000, "Firebase AddDoc");
         console.log(`[Firebase] Resultado de ${workshopType} guardado con éxito. ID: ${docRef.id}`);
         docId = docRef.id;
         firebaseSuccess = true;
     } catch (e) {
         console.error("Error guardando el resultado del taller en Firebase: ", e);
         // Fallback a localStorage
-        localStorage.setItem(`backup_score_${workshopType}_${Date.now()}`, JSON.stringify(workshopData));
+        const backupKey = `backup_score_${workshopType}_${Date.now()}`;
+        localStorage.setItem(backupKey, JSON.stringify(workshopData));
     }
 
-    // Enviar correo automáticamente al administrador usando FormSubmit (Fetch API)
+    // Enviar correo automáticamente al administrador usando FormSubmit
     try {
         const emailMessage = `
-Estudiante: ${studentName}
+Estudiante: ${studentName} (${uid})
 Correo: ${studentEmail}
 Examen: ${workshopType}
 Puntaje: ${finalScore}/100
@@ -85,43 +86,37 @@ Aciertos: ${rawScore}/${totalQuestions}
 Firebase ID: ${docId}
         `.trim();
 
-        await withTimeout(addDoc(collection(db, "mail_notifications"), {
-            channel: "formsubmit",
-            to: ADMIN_NOTIFICATION_EMAIL,
-            subject: `Nuevo Resultado: ${workshopType} - ${studentName}`,
-            student: {
-                name: studentName,
-                email: studentEmail
-            },
-            createdAt: serverTimestamp(),
-            status: "attempted"
-        }), 7000, "mail_notifications");
+        // Notificar en la mini-db de notificaciones
+        try {
+            await withTimeout(addDoc(collection(db, "mail_notifications"), {
+                channel: "formsubmit",
+                to: ADMIN_NOTIFICATION_EMAIL,
+                subject: `Resultado: ${workshopType} - ${studentName}`,
+                student: { name: studentName, email: studentEmail },
+                createdAt: serverTimestamp(),
+                status: "attempted"
+            }), 3000, "mail_notifications");
+        } catch (mErr) { console.warn("No se pudo registrar la notificación de mail en Firestore", mErr); }
 
-        await fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
+        await withTimeout(fetch(`https://formsubmit.co/ajax/${ADMIN_NOTIFICATION_EMAIL}`, {
             method: "POST",
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({
                 _subject: `Nuevo Resultado: ${workshopType} - ${studentName}`,
                 _replyto: studentEmail,
                 _captcha: 'false',
-                _template: 'table',
                 mensaje: emailMessage,
                 estudiante: studentName,
-                correo_estudiante: studentEmail,
                 puntaje: `${finalScore}/100`,
                 aciertos: `${rawScore}/${totalQuestions}`,
                 examen: workshopType
             })
-        });
-        console.log("[Email] Correo enviado exitosamente con FormSubmit.");
+        }), 5000, "FormSubmit Fetch");
+        
+        console.log("[Email] Correo enviado exitosamente.");
     } catch (emailError) {
-        console.error("Error enviando el correo con FormSubmit:", emailError);
+        console.error("Error enviando el correo:", emailError);
     }
 
-    // Devolvemos success basado en si pasamos la ejecución (incluso si firebase falló, intentamos enviar el correo)
-    // Para que la UI avance y no se quede pegada, siempre devolvemos un objeto
     return { success: true, score: finalScore, raw: rawScore, firebaseSuccess };
 }

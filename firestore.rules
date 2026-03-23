@@ -54,7 +54,7 @@ service cloud.firestore {
              data.score.hasAll(['raw', 'totalQuestions', 'final']) &&
              data.score.raw is int &&
              data.score.totalQuestions is int &&
-             data.score.final is float &&
+             data.score.final is number &&
              data.score.raw >= 0 &&
              data.score.raw <= data.score.totalQuestions &&
              data.score.final >= 0.0 &&

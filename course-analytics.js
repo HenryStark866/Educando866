@@ -2,9 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // Read from localStorage (saved by simulacro-global.js)
-    const lecScore = parseInt(localStorage.getItem('simulacro_lectura')) || 0;
-    const logScore = parseInt(localStorage.getItem('simulacro_logica')) || 0;
-    const totalScore = parseInt(localStorage.getItem('simulacro_total')) || 0;
+    const lecScore = parseInt(localStorage.getItem('educando866_simulacro_lectura')) || 0;
+    const logScore = parseInt(localStorage.getItem('educando866_simulacro_logica')) || 0;
+    const totalScore = parseInt(localStorage.getItem('educando866_simulacro_total')) || 0;
 
     const elStatLec = document.getElementById('stat-lectura');
     const elBarLec = document.getElementById('bar-lectura');

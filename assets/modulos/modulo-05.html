@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 5: Lectura Crítica II: Vocabulario y Estructura</title>
+    <title>Módulo 5: Matemática Básica: Aritmética y Razones</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,7 +10,7 @@
     <style>
         body{background:transparent;font-family:'Poppins',sans-serif;}
         .acc-content{transition:max-height .35s ease,opacity .35s ease;max-height:0;opacity:0;overflow:hidden;}
-        .acc-open .acc-content{max-height:600px;opacity:1;}
+        .acc-open .acc-content{max-height:1000px;opacity:1;}
         .acc-open .fa-chevron-down{transform:rotate(180deg);}
         .flashcard{perspective:1000px;cursor:pointer;}
         .fc-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;border-radius:1rem;}
@@ -18,88 +18,107 @@
         .fc-front,.fc-back{position:absolute;width:100%;height:100%;-webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:1.25rem;border-radius:1rem;border:1px solid #e5e7eb;}
         .fc-front{background:#f8fafc;color:#1e293b;}
         .fc-back{background:#059669;color:white;transform:rotateY(180deg);border:none;}
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white">
+<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white custom-scrollbar">
 
     <header class="mb-10 text-center">
-        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-md mb-4 border border-emerald-200">Módulo 5</span>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Lectura Crítica II: Vocabulario y Estructura</h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Vocabulario contextual, tipos de texto y estructura argumentativa en el examen de admisión.</p>
+        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-md mb-3 border border-emerald-200">Educando866 • Módulo 5</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight">Matemática Básica: Aritmética y Razones</h1>
+        <p class="text-base text-gray-500 max-w-2xl mx-auto font-medium">Proporciones, porcentajes y regla de tres.</p>
     </header>
 
     <section class="mb-12 max-w-4xl mx-auto">
-        <div class="bg-pink-50 border-l-4 border-pink-500 p-6 rounded-r-2xl shadow-sm">
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl shadow-sm border border-gray-100">
             <div class="flex items-start gap-4">
-                <div class="text-pink-500 text-2xl mt-1"><i class="fa-solid fa-spell-check"></i></div>
-                <div><h3 class="text-lg font-bold text-pink-900 mb-2">El Vocabulario en el ICFES y la UdeA</h3><p class="text-pink-800 text-sm leading-relaxed">Nunca te pregunten el significado de una palabra de forma aislada. Siempre es en <strong>contexto</strong>. La pregunta es: ¿Qué quiso decir el autor con esta palabra en este párrafo específico? Aquí es donde el 70% de los estudiantes falla.</p></div>
+                <div class="text-blue-500 text-3xl mt-1"><i class="fa-solid fa-percent"></i></div>
+                <div><h3 class="text-lg font-bold text-blue-900 mb-2">Regla de Tres Compuesta</h3><p class="text-blue-800 text-sm leading-relaxed font-medium">Aprendre a identificar si las variables son Directamente Proporcionales o Inversamente Proporcionales.</p></div>
             </div>
         </div>
     </section>
 
+    
+
     <section class="mb-12 max-w-4xl mx-auto">
         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-language text-emerald-500"></i> Conceptos Clave
+            <i class="fa-solid fa-calculator text-emerald-500"></i> Conceptos y Teoría
         </h2>
         <div class="space-y-4">
             <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
-                    <span class="font-bold text-gray-800 text-left">Cómo Resolver Vocabulario Contextual</span>
+                    <span class="font-bold text-gray-800 text-left">Porcentajes Rápidos</span>
                     <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                 </button>
                 <div class="acc-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Estrategia de 3 pasos:<br><ol class='list-decimal pl-5 space-y-2'><li>Tacha la palabra en el texto y lee la oración sin ella.</li><li>Infiere un sinónimo o frase que encaje en ese contexto exacto.</li><li>Reemplaza cada opción de respuesta y lee la oración completa. La que mantenga el sentido del párrafo es la correcta.</li></ol></div>
+                    <div class="p-6 text-gray-600 text-sm leading-relaxed">El 10% es correr la coma. El 5% es la mitad del 10%. El 1% es correr la coma dos veces.</div>
                 </div>
             </div>
             <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
-                    <span class="font-bold text-gray-800 text-left">Tipos de Textos y Sus Intenciones</span>
+                    <span class="font-bold text-gray-800 text-left">Razones y Proporciones</span>
                     <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                 </button>
                 <div class="acc-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Cada tipo de texto tiene una intención comunicativa:<br><ul class='list-disc pl-5 space-y-2'><li><strong>Expositivo:</strong> Informa o explica sin tomar partido.</li><li><strong>Argumentativo:</strong> Defiende una posición con razones.</li><li><strong>Narrativo:</strong> Cuenta eventos, puede tener intención literaria o didáctica.</li><li><strong>Descriptivo:</strong> Caracteriza detalladamente algo o alguien.</li></ul>La UdeA frecuentemente mezcla tipos en un solo texto.</div>
-                </div>
-            </div>
-            <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
-                    <span class="font-bold text-gray-800 text-left">Conectores Discursivos: Claves de Estructura</span>
-                    <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div class="acc-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Los conectores revelan la lógica interna del texto:<br><ul class='list-disc pl-5 space-y-2'><li><strong>Causales:</strong> 'porque', 'ya que', 'puesto que'.</li><li><strong>Adversativos:</strong> 'sin embargo', 'pero', 'no obstante'. (Señalan un giro en el argumento).</li><li><strong>Conclusivos:</strong> 'por lo tanto', 'en consecuencia', 'así pues'. (Aquí suele estar la tesis).</li></ul></div>
+                    <div class="p-6 text-gray-600 text-sm leading-relaxed">A es a B como C es a D. Multiplica en cruz para hallar la incógnita.</div>
                 </div>
             </div></div>
     </section>
 
     <section class="mb-16 max-w-4xl mx-auto">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Repaso Rápido</h2>
-        <p class="text-sm text-gray-500 mb-6">Pasa el cursor (o toca) las tarjetas para ver la respuesta.</p>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 h-44">
-                <div class="flashcard h-full">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Flashcards Rápido</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">¿Qué busca la pregunta '¿A qué se refiere el autor con X?'</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">A que identifiques el significado de X <strong>en ese contexto específico</strong>, no su definición del diccionario.</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">Aumentar 20%</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">Multiplicar por 1.20</p></div>
                     </div>
                 </div>
-                <div class="flashcard h-full">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">Un texto que empieza con 'Es falso que...'</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">Es claramente <strong>argumentativo</strong>. El autor toma una posición en contra de una idea y probablemente presentará evidencia para refutarla.</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">Disminuir 15%</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">Multiplicar por 0.85</p></div>
                     </div>
                 </div>
-                <div class="flashcard h-full">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">'Sin embargo' en un párrafo</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">Señala una <strong>concesión adversativa</strong>: el autor reconoce un punto válido del lado contrario, pero lo supera con un argumento más fuerte. Presta máxima atención a lo que viene DESPUÉS de 'sin embargo'.</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">Proporción Áurea</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">1.618...</p></div>
                     </div>
                 </div></div>
     </section>
 
-    <section class="max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
+    <section class="max-w-4xl mx-auto bg-white border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-lg relative overflow-hidden mb-12">
         <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comprobación de Lectura</h2>
-        <div id="quiz-container" class="space-y-8"><div class="q-item" data-correct="b"><p class="font-semibold text-gray-800 mb-4">1. En el texto: 'La ciencia no es infalible, sin embargo, es el mejor sistema que hemos desarrollado para aproximarnos a la verdad.' La función del conector 'sin embargo' es:</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1" value="a" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Introducir una causa</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1" value="b" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Mostrar una contradicción que el autor resuelve a favor de la ciencia</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1" value="c" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Presentar una conclusión</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div></div></div><div class="q-item" data-correct="a"><p class="font-semibold text-gray-800 mb-4">2. Si el autor usa la palabra 'voraz' para referirse al apetito del mercado global, en ese contexto significa:</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q2" value="a" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Hambriento, insaciable en su consumo de recursos</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q2" value="b" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Violento y agresivo físicamente</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q2" value="c" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Lento y metódico</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div></div></div><button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-vial"></i></div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Quiz de Entrenamiento</h2>
+                <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-0.5">Mide tu nivel actual</p>
+            </div>
+        </div>
+        <div id="quiz-container" class="space-y-8"><div class="q-item" data-correct="a" data-explanation="45/3 = 15 por camisa. 15 * 7 = 105."><p class="font-semibold text-gray-800 mb-4">1. Si 3 camisas cuestan $45, ¿cuánto cuestan 7?</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q5_1" value="a" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">$105</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q5_1" value="b" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">$90</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q5_1" value="c" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">$115</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-bold"></div></div></div><button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>
     </section>
+
+    <section class="max-w-4xl mx-auto bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl transform rotate-12"><i class="fa-solid fa-download"></i></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="text-xl font-bold mb-2">Material de Profundización</h3>
+                <p class="text-gray-400 text-sm">Descarga la guía en PDF con 50 ejercicios adicionales resueltos.</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i> Descargar Guía
+            </a>
+        </div>
+    </section>
+
 
     <div class="h-20"></div>
     <script>
@@ -135,14 +154,14 @@
                         else if(userVal===correct) fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-800 border border-green-200';
                         else fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-red-50 text-red-800 border border-red-200';
                         if(!answered) fb.innerHTML='<i class="fa-solid fa-triangle-exclamation mr-2"></i> Sin respuesta.';
-                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto!';
-                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. Revisa el acordeón correspondiente.';
+                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto! ' + (q.dataset.explanation || '');
+                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. ' + (q.dataset.explanation || '');
                     }
                 });
                 if(window.parent&&window.parent.progressManager){
                     const pct=Math.round((score/total)*100);
                     window.parent.progressManager.saveQuizScore('modulo-05',pct);
-                    btn.textContent=`Guardado (${pct}%)`;
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-check mr-2"></i> Puntaje: ${pct}%`;
                     btn.className='flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-gray-800 text-white font-bold rounded-xl cursor-default';
                 }
             });

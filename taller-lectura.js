@@ -77,17 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialization
     function init() {
-        if (localStorage.getItem('vetprep_student_name')) {
-            nameInput.value = localStorage.getItem('vetprep_student_name');
-            emailInput.value = localStorage.getItem('vetprep_student_email');
+        if (localStorage.getItem('educando866_student_name')) {
+            nameInput.value = localStorage.getItem('educando866_student_name');
+            emailInput.value = localStorage.getItem('educando866_student_email');
         }
     }
 
     startForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        localStorage.setItem('vetprep_student_name', nameInput.value.trim());
-        localStorage.setItem('vetprep_student_email', emailInput.value.trim());
+        localStorage.setItem('educando866_student_name', nameInput.value.trim());
+        localStorage.setItem('educando866_student_email', emailInput.value.trim());
         
         studentModal.classList.add('hidden');
         uiMain.classList.remove('hidden');

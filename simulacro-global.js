@@ -147,9 +147,9 @@ function gradeExam(forced = false) {
     const totalPerc = Math.round(((lecturaScore + logicaScore) / 80) * 100);
 
     // Salvar resultados globalmente si existe window.parent o localStorage (simulando Base de Datos/Firebase)
-    localStorage.setItem('simulacro_lectura', lecPerc);
-    localStorage.setItem('simulacro_logica', logPerc);
-    localStorage.setItem('simulacro_total', totalPerc);
+    localStorage.setItem('educando866_simulacro_lectura', lecPerc);
+    localStorage.setItem('educando866_simulacro_logica', logPerc);
+    localStorage.setItem('educando866_simulacro_total', totalPerc);
 
     // Custom stylized alert instead of standard alert
     document.body.insertAdjacentHTML('beforeend', `

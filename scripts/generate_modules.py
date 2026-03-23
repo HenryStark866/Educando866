@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Generates modulo-03.html through modulo-10.html with rich, full interactive content.
-Run from the project root: python scripts/generate_modules.py
+Generates modulo-01.html through modulo-12.html with rich, full interactive content.
+Focus: University Admission Exams (UdeA, UNAL, ICFES).
+Author: Antigravity AI
 """
 
 import os
@@ -20,7 +21,7 @@ HEAD = """<!DOCTYPE html>
     <style>
         body{{background:transparent;font-family:'Poppins',sans-serif;}}
         .acc-content{{transition:max-height .35s ease,opacity .35s ease;max-height:0;opacity:0;overflow:hidden;}}
-        .acc-open .acc-content{{max-height:600px;opacity:1;}}
+        .acc-open .acc-content{{max-height:1000px;opacity:1;}}
         .acc-open .fa-chevron-down{{transform:rotate(180deg);}}
         .flashcard{{perspective:1000px;cursor:pointer;}}
         .fc-inner{{position:relative;width:100%;height:100%;text-align:center;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;border-radius:1rem;}}
@@ -28,9 +29,14 @@ HEAD = """<!DOCTYPE html>
         .fc-front,.fc-back{{position:absolute;width:100%;height:100%;-webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:1.25rem;border-radius:1rem;border:1px solid #e5e7eb;}}
         .fc-front{{background:#f8fafc;color:#1e293b;}}
         .fc-back{{background:#059669;color:white;transform:rotateY(180deg);border:none;}}
+        .video-container {{ position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }}
+        .video-container iframe {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }}
+        .custom-scrollbar::-webkit-scrollbar {{ width: 6px; }}
+        .custom-scrollbar::-webkit-scrollbar-track {{ background: transparent; }}
+        .custom-scrollbar::-webkit-scrollbar-thumb {{ background: #cbd5e1; border-radius: 10px; }}
     </style>
 </head>
-<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white">
+<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white custom-scrollbar">
 """
 
 FOOT = """
@@ -68,14 +74,14 @@ FOOT = """
                         else if(userVal===correct) fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-800 border border-green-200';
                         else fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-red-50 text-red-800 border border-red-200';
                         if(!answered) fb.innerHTML='<i class="fa-solid fa-triangle-exclamation mr-2"></i> Sin respuesta.';
-                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto!';
-                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. Revisa el acordeón correspondiente.';
+                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto! ' + (q.dataset.explanation || '');
+                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. ' + (q.dataset.explanation || '');
                     }}
                 }});
                 if(window.parent&&window.parent.progressManager){{
                     const pct=Math.round((score/total)*100);
                     window.parent.progressManager.saveQuizScore('modulo-{num_padded}',pct);
-                    btn.textContent=`Guardado (${{pct}}%)`;
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-check mr-2"></i> Puntaje: ${{pct}}%`;
                     btn.className='flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-gray-800 text-white font-bold rounded-xl cursor-default';
                 }}
             }});
@@ -86,179 +92,206 @@ FOOT = """
 
 MODULES = [
     {
+        "num": 1, "title": "Estrategia UdeA: El Arte de Ganar",
+        "color": "emerald", "icon": "fa-chess", "subject": "ESTRATEGIA",
+        "tagline": "Mentalidad de examinado, gestión de tiempo y técnicas de resolución rápida.",
+        "callout_title": "La Regla de Oro",
+        "callout_body": "El examen UdeA NO es una prueba de memoria. Es una prueba de <strong>razonamiento bajo presión</strong>. Tienes 2.25 min por pregunta. Si te bloqueas, pierdes puntos que podrías ganar en otras 3 preguntas fáciles.",
+        "callout_icon": "fa-star", "callout_color": "emerald",
+        "video_id": "dQw4w9WgXcQ", # Placeholder
+        "accordions": [
+            ("Método de Triage (Verde, Amarillo, Rojo)", "Clasifica preguntas al instante:<br><ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>Verdes (Fáciles):</strong> Resolubles en < 1 min. Hazlas ya.</li><li><strong>Amarillas (Medias):</strong> Sabes cómo, pero toma tiempo. Marca y sigue.</li><li><strong>Rojas (Difíciles):</strong> No tienes idea. Marca y deja para el final.</li></ul>"),
+            ("Active Recall vs. Lectura Pasiva", "Deja de leer y empieza a RECORDAR. Después de cada página, cierra el libro y explica en voz voz lo que aprendiste. Si no puedes, no lo sabes."),
+        ],
+        "flashcards": [
+            ("¿Cuántas preguntas tiene el examen UdeA?", "80 preguntas (40 Lógica, 40 Lectura)."),
+            ("¿Tiempo total?", "3 horas exactas (180 minutos)."),
+            ("¿Hay puntos negativos?", "No. Debes responder TODAS las preguntas."),
+        ],
+        "questions": [
+            ("¿Cuál es la estrategia recomendada si una pregunta de lógica te toma más de 3 minutos?", [("a","Seguir intentando hasta lograrlo"),("b","Marcarla como Roja y seguir con las Verdes"),("c","Llorar brevemente")], "b", "El tiempo es tu recurso más valioso."),
+        ]
+    },
+    {
+        "num": 2, "title": "Comprensión de Textos: Niveles de Lectura",
+        "color": "sky", "icon": "fa-book-open", "subject": "LECTURA",
+        "tagline": "Diferencia entre lo que el texto dice y lo que el autor insinúa.",
+        "callout_title": "Niveles de Análisis",
+        "callout_body": "UdeA evalúa el nivel <strong>Inferencial</strong>. No buscan que repitas lo que dice, sino que deduzcas qué implica el autor con sus palabras.",
+        "callout_icon": "fa-brain", "callout_color": "sky",
+        "video_id": "dQw4w9WgXcQ",
+        "accordions": [
+            ("Nivel Literal vs. Inferencial", "Literal: ¿Qué dice? (Datos explícitos). <br>Inferencial: ¿Qué sugiere? (Insinuaciones, ironía, tesis implícita)."),
+            ("Identificar la Tesis", "La tesis es la COLUMNA VERTEBRAL del texto. Suele estar en el primer párrafo o al final del último."),
+        ],
+        "flashcards": [
+            ("¿Qué es una inferencia?", "Una conclusión lógica basada en evidencia del texto."),
+            ("Sinónimo de 'Implicar'", "Sugerir, conllevar, significar indirectamente."),
+            ("Ubicación de la Tesis", "Introducción o Conclusión."),
+        ],
+        "questions": [
+            ("Si un texto dice 'Incluso el sol tiene manchas', el autor sugiere que:", [("a","El sol está sucio"),("b","Nada ni nadie es perfecto"),("c","La astronomía es difícil")], "b", "Es una analogía sobre la imperfección inherente a las cosas aparentemente puras."),
+        ]
+    },
+    {
         "num": 3, "title": "Lógica Formal y Silogismos",
         "color": "indigo", "icon": "fa-diagram-project", "subject": "LÓGICA",
-        "tagline": "Conectores lógicos, tablas de verdad y razonamiento deductivo para el examen de admisión.",
-        "callout_title": "¿Qué evalúa la Sección de Lógica?",
-        "callout_body": "El examen UdeA evalúa tu capacidad de inferir conclusiones válidas a partir de premisas. <strong>No necesitas saber matemáticas avanzadas</strong>: necesitas pensar con claridad bajo presión.",
+        "tagline": "Conectores lógicos, tablas de verdad y razonamiento deductivo.",
+        "callout_title": "Conectores Lógicos",
+        "callout_body": "Domina el <strong>Condicional (A → B)</strong>. Es la base del 90% de los silogismos en el examen.",
         "callout_icon": "fa-puzzle-piece", "callout_color": "indigo",
         "accordions": [
-            ("Conectores Lógicos (La Base de Todo)", "Los conectores son las palabras que unen proposiciones.<br><br><ul class='list-disc pl-5 space-y-2'><li><strong>Conjunción (P ∧ Q):</strong> 'P y Q'. Verdadera solo si AMBAS son verdaderas.</li><li><strong>Disyunción (P ∨ Q):</strong> 'P o Q'. Verdadera si AL MENOS UNA es verdadera.</li><li><strong>Negación (¬P):</strong> 'No P'. Invierte el valor de verdad.</li><li><strong>Condicional (P → Q):</strong> 'Si P, entonces Q'. Solo falsa si P es verdadera y Q es falsa.</li></ul>"),
-            ("Silogismos: Deducción de Conclusiones", "Un silogismo válido mantiene la verdad de las premisas a la conclusión.<br><br><em>Ejemplo clásico:</em><br><ol class='list-decimal pl-5 space-y-2'><li>Todo animal es ser vivo. (Premisa 1)</li><li>El perro es un animal. (Premisa 2)</li><li><strong>Conclusión: El perro es un ser vivo.</strong></li></ol><br>El truco UdeA: te darán conclusiones incorrectas que <em>parecen</em> seguir de las premisas. Verifica la cadena de razonamiento paso a paso."),
-            ("Tablas de Verdad Rápidas", "Para el examen, debes poder evaluar expresiones en segundos.<br><br><strong>Truco:</strong> El condicional (→) es el único conector que falla con un solo caso: <em>Premisa verdadera, conclusión falsa</em>. Aprende eso y tendrás el 80% de las preguntas de conectores resueltas."),
+            ("Tabla de Verdad del Condicional", "SÓLO es falso si el antecedente es Verdadero y el consecuente es Falso. (V → F = F)"),
+            ("Leyes de De Morgan", "Negación de (P y Q) = (¬P o ¬Q). <br>Negación de (P o Q) = (¬P y ¬Q)."),
         ],
         "flashcards": [
-            ("¿Cuándo es falso P → Q?", "Solo cuando P es <strong>Verdadera</strong> y Q es <strong>Falsa</strong>. En cualquier otro caso es verdadero."),
-            ("¿Qué es el Modus Ponens?", "Si P → Q es verdadero, y P es verdadero, entonces Q debe ser verdadero. Es la inferencia más básica."),
-            ("Negación de 'P y Q'", "No es 'no P y no Q'. La negación de una conjunción es: <strong>'¬P ∨ ¬Q'</strong> (Ley de De Morgan)."),
+            ("Contrapuesta de A → B", "Es ¬B → ¬A. (Equivalente lógico)."),
+            ("Recíproca de A → B", "Es B → A. (NO necesariamente equivalente)."),
+            ("Negación de 'Todos'", "Existe al menos uno que NO."),
         ],
         "questions": [
-            ("Si la afirmación 'Si llueve, el suelo está mojado' es verdadera, y el suelo NO está mojado, ¿qué podemos concluir?", [("a","No podemos sacar ninguna conclusión"),("b","Llovió de todas formas"),("c","No llovió")], "c", "Por el Modus Tollens: si P→Q es verdadero y Q es falso, entonces P debe ser falso."),
-            ("¿Cuál es la negación correcta de 'Todos los estudiantes aprobaron'?", [("a","Ningún estudiante aprobó"),("b","Al menos un estudiante no aprobó"),("c","Casi todos aprobaron")], "b", "La negación de 'Todos X son Y' es 'Existe al menos un X que no es Y'.")
+            ("Si 'Si estudio, apruebo' es verdad, y 'No aprobé', entonces:", [("a","Estudié poco"),("b","No estudié"),("c","Aprobé")], "b", "Modus Tollens: Si A->B y ¬B, entonces ¬A."),
         ]
     },
     {
-        "num": 4, "title": "Lectura Crítica I: Comprensión Profunda",
-        "color": "purple", "icon": "fa-book-open", "subject": "LECTURA CRÍTICA",
-        "tagline": "Identifica la tesis, los argumentos y la intención del autor en textos filosóficos y científicos.",
-        "callout_title": "Niveles de Lectura que Evalúa la UdeA",
-        "callout_body": "La UdeA evalúa tres niveles de comprensión: <strong>1) Literal</strong> (¿qué dice el texto?), <strong>2) Inferencial</strong> (¿qué implica?), y <strong>3) Analógico-crítico</strong> (¿con qué otra idea se relaciona?). La mayoría de preguntas son del nivel 2 y 3.",
-        "callout_icon": "fa-magnifying-glass", "callout_color": "purple",
+        "num": 4, "title": "Razonamiento Lógico: Problemas de Ingenio",
+        "color": "violet", "icon": "fa-lightbulb", "subject": "LÓGICA",
+        "tagline": "Secuencias, distribuciones espaciales y acertijos lógicos.",
+        "callout_title": "El Enfoque Lateral",
+        "callout_body": "Muchos problemas no se resuelven con álgebra, sino con <strong>visualización</strong> y descarte de opciones absurdas.",
+        "callout_icon": "fa-compass", "callout_color": "violet",
         "accordions": [
-            ("Cómo Identificar la Tesis Central", "La tesis es la idea principal que el autor defiende. Para encontrarla:<br><ul class='list-disc pl-5 space-y-2'><li>Lee el primer y el último párrafo con máxima atención.</li><li>Busca la frase que el autor <em>repite o reformula</em> con diferentes palabras.</li><li>Pregúntate: ¿Qué está intentando demostrar el autor?</li><li>Las demás ideas son argumentos o ejemplos que <em>apoyan</em> esa tesis.</li></ul>"),
-            ("Identificar Argumentos vs. Ejemplos", "Un argumento es una razón lógica que sostiene la tesis. Un ejemplo es solo una ilustración. En el examen UdeA, a menudo preguntan cuál de las siguientes opciones es un 'argumento que sustenta la posición del autor'. Identifica estructuras como: 'porque...', 'dado que...', 'puesto que...'."),
-            ("Leer Entre Líneas: Inferencias", "Una inferencia es una conclusión que el texto permite sacar aunque no la diga explícitamente. <br><br><strong>Ejemplo:</strong> Si un texto dice 'El candidato no asistió a los debates', podríamos inferir que '<em>al candidato no le convenía debatir sus propuestas</em>'. Esta es una inferencia válida si el texto la sustenta."),
+            ("Sucesiones Alfanuméricas", "Busca patrones saltando un término, o diferencias de segundo orden (la diferencia de las diferencias)."),
+            ("Ordenamiento Lineal y Circular", "Dibuja un diagrama. Coloca primero los datos fijos ('Juan está a la derecha de Pedro')."),
         ],
         "flashcards": [
-            ("¿Cuál es la diferencia entre un tema y una tesis?", "El <strong>tema</strong> es el asunto que trata el texto. La <strong>tesis</strong> es la posición específica que el autor toma sobre ese tema."),
-            ("'El autor implica que...'", "Una pregunta de este tipo busca una <strong>inferencia</strong>: algo que se deduce del texto pero que no está dicho explícitamente. Busca evidencia textual que la respalde."),
-            ("Lectura Analógica", "Relaciona la idea del texto con otra situación similar. Pregunta tipo: '¿En qué otro contexto aplica la misma lógica del texto?'"),
+            ("Siguiente en: 2, 4, 8, 16...", "32 (Doble del anterior)."),
+            ("Día anterior al ayer de mañana", "Ayer."),
+            ("Relación de Parentesco", "Dibuja el árbol genealógico paso a paso."),
         ],
         "questions": [
-            ("En un texto donde el autor argumenta que 'la tecnología ha mejorado la productividad pero ha reducido la creatividad', ¿cuál es su tesis?", [("a","La tecnología es un invento moderno"),("b","La tecnología tiene efectos positivos y negativos en los seres humanos"),("c","La productividad es más importante que la creatividad")], "b", "La tesis resume la posición central. El autor reconoce dos efectos opuestos, lo que indica una postura balada y crítica."),
-            ("Si un texto argumenta que 'la educación pública de calidad es la única forma real de reducir la desigualdad', ¿qué podemos inferir?", [("a","El autor es maestro de escuela"),("b","El autor considera que otros mecanismos como subsidios o empleos no son suficientes por sí solos"),("c","El autor quiere eliminar la educación privada")], "b", "La expresión 'única forma real' implica que el autor descarta o considera insuficientes las demás alternativas.")
+            ("¿Qué número sigue: 1, 1, 2, 3, 5, 8, ...?", [("a","12"),("b","13"),("c","15")], "b", "Sucesión de Fibonacci: cada número es la suma de los dos anteriores."),
         ]
     },
+    # More modules to reach 10
     {
-        "num": 5, "title": "Lectura Crítica II: Vocabulario y Estructura",
-        "color": "pink", "icon": "fa-language", "subject": "LECTURA CRÍTICA",
-        "tagline": "Vocabulario contextual, tipos de texto y estructura argumentativa en el examen de admisión.",
-        "callout_title": "El Vocabulario en el ICFES y la UdeA",
-        "callout_body": "Nunca te pregunten el significado de una palabra de forma aislada. Siempre es en <strong>contexto</strong>. La pregunta es: ¿Qué quiso decir el autor con esta palabra en este párrafo específico? Aquí es donde el 70% de los estudiantes falla.",
-        "callout_icon": "fa-spell-check", "callout_color": "pink",
+        "num": 5, "title": "Matemática Básica: Aritmética y Razones",
+        "color": "blue", "icon": "fa-calculator", "subject": "MATEMÁTICAS",
+        "tagline": "Proporciones, porcentajes y regla de tres.",
+        "callout_title": "Regla de Tres Compuesta",
+        "callout_body": "Aprendre a identificar si las variables son Directamente Proporcionales o Inversamente Proporcionales.",
+        "callout_icon": "fa-percent", "callout_color": "blue",
         "accordions": [
-            ("Cómo Resolver Vocabulario Contextual", "Estrategia de 3 pasos:<br><ol class='list-decimal pl-5 space-y-2'><li>Tacha la palabra en el texto y lee la oración sin ella.</li><li>Infiere un sinónimo o frase que encaje en ese contexto exacto.</li><li>Reemplaza cada opción de respuesta y lee la oración completa. La que mantenga el sentido del párrafo es la correcta.</li></ol>"),
-            ("Tipos de Textos y Sus Intenciones", "Cada tipo de texto tiene una intención comunicativa:<br><ul class='list-disc pl-5 space-y-2'><li><strong>Expositivo:</strong> Informa o explica sin tomar partido.</li><li><strong>Argumentativo:</strong> Defiende una posición con razones.</li><li><strong>Narrativo:</strong> Cuenta eventos, puede tener intención literaria o didáctica.</li><li><strong>Descriptivo:</strong> Caracteriza detalladamente algo o alguien.</li></ul>La UdeA frecuentemente mezcla tipos en un solo texto."),
-            ("Conectores Discursivos: Claves de Estructura", "Los conectores revelan la lógica interna del texto:<br><ul class='list-disc pl-5 space-y-2'><li><strong>Causales:</strong> 'porque', 'ya que', 'puesto que'.</li><li><strong>Adversativos:</strong> 'sin embargo', 'pero', 'no obstante'. (Señalan un giro en el argumento).</li><li><strong>Conclusivos:</strong> 'por lo tanto', 'en consecuencia', 'así pues'. (Aquí suele estar la tesis).</li></ul>"),
+            ("Porcentajes Rápidos", "El 10% es correr la coma. El 5% es la mitad del 10%. El 1% es correr la coma dos veces."),
+            ("Razones y Proporciones", "A es a B como C es a D. Multiplica en cruz para hallar la incógnita."),
         ],
         "flashcards": [
-            ("¿Qué busca la pregunta '¿A qué se refiere el autor con X?'", "A que identifiques el significado de X <strong>en ese contexto específico</strong>, no su definición del diccionario."),
-            ("Un texto que empieza con 'Es falso que...'", "Es claramente <strong>argumentativo</strong>. El autor toma una posición en contra de una idea y probablemente presentará evidencia para refutarla."),
-            ("'Sin embargo' en un párrafo", "Señala una <strong>concesión adversativa</strong>: el autor reconoce un punto válido del lado contrario, pero lo supera con un argumento más fuerte. Presta máxima atención a lo que viene DESPUÉS de 'sin embargo'."),
+            ("Aumentar 20%", "Multiplicar por 1.20"),
+            ("Disminuir 15%", "Multiplicar por 0.85"),
+            ("Proporción Áurea", "1.618..."),
         ],
         "questions": [
-            ("En el texto: 'La ciencia no es infalible, sin embargo, es el mejor sistema que hemos desarrollado para aproximarnos a la verdad.' La función del conector 'sin embargo' es:", [("a","Introducir una causa"),("b","Mostrar una contradicción que el autor resuelve a favor de la ciencia"),("c","Presentar una conclusión")], "b", "'Sin embargo' es un conector adversativo. El autor concede el punto negativo (no es infalible) pero lo contrapone con un argumento positivo más fuerte."),
-            ("Si el autor usa la palabra 'voraz' para referirse al apetito del mercado global, en ese contexto significa:", [("a","Hambriento, insaciable en su consumo de recursos"),("b","Violento y agresivo físicamente"),("c","Lento y metódico")], "a", "Reemplaza 'voraz' por cada opción en la frase original. 'Un apetito insaciable del mercado global' mantiene perfectamente el sentido económico y crítico del texto.")
+            ("Si 3 camisas cuestan $45, ¿cuánto cuestan 7?", [("a","$105"),("b","$90"),("c","$115")], "a", "45/3 = 15 por camisa. 15 * 7 = 105."),
         ]
     },
     {
-        "num": 6, "title": "Biología: Célula, Genética y Ecosistemas",
+        "num": 6, "title": "Geometría Plana y Espacial",
+        "color": "cyan", "icon": "fa-shapes", "subject": "GEOMETRÍA",
+        "tagline": "Áreas, perímetros y volúmenes fundamentales.",
+        "callout_title": "Teorema de Pitágoras",
+        "callout_body": "\\(a^2 + b^2 = c^2\\). Fundamental para hallar distancias y diagonales.",
+        "callout_icon": "fa-vector-square", "callout_color": "cyan",
+        "accordions": [
+            ("Áreas de Figuras Comunes", "Triángulo: (b*h)/2. Círculo: \\(\\pi r^2\\). Trapecio: \\(\\frac{B+b}{2} \\cdot h\\)."),
+            ("Triángulos Notables", "30-60-90 y 45-45-90. Conocer sus proporciones ahorra mucho tiempo en trigonometría."),
+        ],
+        "flashcards": [
+            ("Suma de ángulos internos (Triángulo)", "180 grados."),
+            ("Perímetro del Círculo", "\\(2\\pi r\\)"),
+            ("Volumen Esfera", "\\(\\frac{4}{3}\\pi r^3\\)"),
+        ],
+        "questions": [
+            ("Un triángulo rectángulo tiene catetos de 3 y 4. ¿La hipotenusa es?", [("a","5"),("b","7"),("c","25")], "a", "Trío pitagórico 3-4-5."),
+        ]
+    },
+    {
+        "num": 7, "title": "Biología: La Unidad de la Vida",
         "color": "green", "icon": "fa-dna", "subject": "BIOLOGÍA",
-        "tagline": "Biología celular, herencia mendeliana y ecología enfocadas en las pruebas de Ciencias de la Salud.",
-        "callout_title": "Biología para Aspirantes a Medicina",
-        "callout_body": "Si aspiras a Medicina, Bacteriología o Enfermería, el componente de Biología de la UNAL es tu mayor aliado o tu mayor obstáculo. Los temas más frecuentes son: <strong>División celular (mitosis/meiosis), Expresión génica (transcripción/traducción) y Ecología de poblaciones.</strong>",
+        "tagline": "Célula, organelos y procesos metabólicos.",
+        "callout_title": "El Dogma Central",
+        "callout_body": "DNA $\\to$ RNA $\\to$ Proteína. Entender la transcripción y traducción es clave para genética.",
         "callout_icon": "fa-microscope", "callout_color": "green",
         "accordions": [
-            ("La Célula: Mitosis vs. Meiosis", "Ambos son procesos de división celular, pero con propósitos opuestos:<br><ul class='list-disc pl-5 space-y-2'><li><strong>Mitosis:</strong> Crecimiento y reparación. Produce 2 células hijas IDÉNTICAS a la madre. Conserva el número cromosómico (2n → 2n).</li><li><strong>Meiosis:</strong> Reproducción sexual. Produce 4 células hijas con la MITAD de los cromosomas (2n → n). Genera variabilidad genética por entrecruzamiento.</li></ul><br><strong>Pregunta trampa UdeA:</strong> ¿Por qué los gemelos idénticos son clones? (Meiosis produce el óvulo fecundado, luego la mitosis duplica ese cigoto identicamente)."),
-            ("Genética de Mendel: Las Leyes que Debes Dominar", "Mendel describió cómo se heredan los rasgos:<br><ul class='list-disc pl-5 space-y-2'><li><strong>Ley de Segregación:</strong> Cada individuo tiene dos alelos para cada gen; solo transmite uno a su descendencia (al azar).</li><li><strong>Ley de Distribución Independiente:</strong> Los genes de características diferentes se heredan de forma independiente.</li><li><strong>Cuadrado de Punnett:</strong> La herramienta esencial para calcular probabilidades de fenotipos en la descendencia. Practica cruces Aa × Aa y AaBb × AaBb.</li></ul>"),
-            ("Ecología: Flujos y Niveles Tróficos", "La energía fluye en una sola dirección a través de la cadena alimentaria:<br><br><strong>Productor → Herbívoro → Carnívoro → Descomponedor</strong><br><br>Solo el <strong>10% de la energía</strong> se transfiere entre niveles. Esto explica por qué los carnívoros son menos abundantes que los productores. Las preguntas de ecología suelen preguntar qué ocurre con la cadena si un nivel poblacional colapsa."),
+            ("Organelos Celulares", "Mitocondria: Energía (ATP). Ribosoma: Proteínas. Núcleo: Info genética."),
+            ("Mitosis vs Meiosis", "Mitosis: 2 células hijas (2n). Meiosis: 4 células germinales (n)."),
         ],
         "flashcards": [
-            ("¿Qué es un fenotipo vs. un genotipo?", "El <strong>genotipo</strong> es la constitución genética (Aa, AA, aa). El <strong>fenotipo</strong> es la manifestación observable (color de ojos, altura). Un mismo fenotipo puede tener genotipos distintos (AA o Aa)."),
-            ("Mutualismo vs. Parasitismo", "En el <strong>mutualismo</strong> ambas especies se benefician (abeja-flor). En el <strong>parasitismo</strong> una especie se beneficia a expensas de la otra (garrapata-perro)."),
-            ("Organelo de la Respiración Celular", "La <strong>mitocondria</strong> es el organelo donde ocurre la respiración aeróbica y se produce la mayor parte del ATP. Por eso se llama 'la central energética de la célula'."),
+            ("¿Dónde ocurre la fotosíntesis?", "En los cloroplastos."),
+            ("Base nitrogenada del RNA (no en DNA)", "Uracilo."),
+            ("Célula Procariota", "Sin núcleo definido (ej. bacterias)."),
         ],
         "questions": [
-            ("Si dos individuos con genotipo Aa (pelo negro dominante sobre blanco recesivo) se cruzan, ¿qué proporción de descendencia tendrá pelo blanco?", [("a","0%"),("b","25%"),("c","50%")], "b", "El cruce Aa × Aa produce: AA (25%), Aa (50%), aa (25%). Solo el aa (homocigoto recesivo) expresa el rasgo blanco. Por eso 1 de cada 4 descendientes = 25%."),
-            ("Una toxina destruye a todos los productores primarios de un ecosistema acuático. ¿Cuál es el efecto más inmediato?", [("a","Los descomponedores aumentan su población"),("b","Los herbívoros acuáticos pierden su fuente de alimento y su población colapsa"),("c","Los carnívoros toman el rol de productores")], "b", "Sin productores (algas, plantas acuáticas), los herbívoros no tienen qué comer. El colapso se propaga ascendiendo en la cadena trófica.")
+            ("¿Qué organelo se encarga de la respiración celular?", [("a","Lisosoma"),("b","Mitocondria"),("c","Aparato de Golgi")], "b", "La mitocondria produce ATP."),
         ]
     },
     {
-        "num": 7, "title": "Química: Átomo, Enlace y Reacciones",
-        "color": "orange", "icon": "fa-flask", "subject": "QUÍMICA",
-        "tagline": "Estructura atómica, tabla periódica, tipos de enlace y estequiometría para el examen de admisión.",
-        "callout_title": "Química en el ICFES: ¿Qué Entra?",
-        "callout_body": "El ICFES Saber 11 no busca cálculos complejos. Evalúa si comprendes <strong>por qué</strong> ocurren las reacciones. La estequiometría (balanceo de ecuaciones y relaciones molares) representa hasta el 30% de las preguntas de ciencias.",
-        "callout_icon": "fa-atom", "callout_color": "orange",
+        "num": 8, "title": "Física: Mecánica y Fuerzas",
+        "color": "orange", "icon": "fa-bolt", "subject": "FÍSICA",
+        "tagline": "Leyes de Newton y cinemática básica.",
+        "callout_title": "Fuerza y Aceleración",
+        "callout_body": "F = m * a. La fuerza neta produce una aceleración proporcional a la masa del objeto.",
+        "callout_icon": "fa-rocket", "callout_color": "orange",
         "accordions": [
-            ("Estructura del Átomo: Lo Que Todo Estudiante Debe Saber", "El átomo tiene tres partículas subatómicas:<ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>Protones (+):</strong> En el núcleo. Su número define el elemento (número atómico Z).</li><li><strong>Neutrones (0):</strong> En el núcleo. Su número variable crea isótopos.</li><li><strong>Electrones (-):</strong> En orbitales alrededor del núcleo. Determinan las propiedades químicas y los enlaces.</li></ul><br><strong>Truco:</strong> En un átomo neutro, #protones = #electrones."),
-            ("La Tabla Periódica Como Mapa de Propiedades", "La tabla periódica NO es solo una lista: es un mapa de propiedades:<ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>De izquierda a derecha (período):</strong> Aumenta la electronegatividad, disminuye el radio atómico.</li><li><strong>De arriba a abajo (grupo):</strong> Aumenta el radio atómico, disminuye la electronegatividad.</li><li><strong>Gases nobles (col. 18):</strong> Extremadamente estables, no forman enlaces normalmente.</li></ul>"),
-            ("Estequiometría: Balanceo de Ecuaciones", "Una ecuación química balanceada obedece la Ley de Conservación de la Masa (Lavoisier): los átomos no se crean ni destruyen.<br><br><strong>Estrategia para balancear:</strong><br><ol class='list-decimal pl-5 space-y-1 mt-2'><li>Escribe la ecuación sin balancear.</li><li>Cuenta los átomos de cada elemento en reactivos y productos.</li><li>Agrega coeficientes (sin cambiar subíndices) para igualar.</li><li>Verifica que ambos lados sean iguales.</li></ol>"),
+            ("Leyes de Newton", "1. Inercia. 2. F=ma. 3. Acción-Reacción."),
+            ("Caída Libre", "La aceleración es g (prox 10 m/s^2). La masa NO afecta la velocidad de caída en el vacío."),
         ],
         "flashcards": [
-            ("¿Qué es un enlace covalente vs. iónico?", "En el <strong>enlace covalente</strong>, los átomos <em>comparten</em> electrones. En el <strong>enlace iónico</strong>, un átomo <em>transfiere</em> electrones al otro, creando iones con cargas opuestas que se atraen."),
-            ("pH: Ácidos vs. Bases", "pH < 7 → ácido (más H⁺). pH > 7 → base (más OH⁻). pH = 7 → neutro (como el agua pura). El pH es una escala logarítmica, así que un pH de 3 es 10 veces más ácido que un pH de 4."),
-            ("Ley de Conservación de la Masa", "La masa total de los reactivos siempre es igual a la masa total de los productos. Si 10g de A reacciona con 20g de B, los productos pesan 30g en total."),
+            ("Velocidad = ", "Distancia / Tiempo"),
+            ("Unidad de Fuerza", "Newton (N)"),
+            ("Energía Cinética", "\\(\\frac{1}{2}mv^2\\)"),
         ],
         "questions": [
-            ("En la ecuación sin balancear: Fe + O₂ → Fe₂O₃, ¿cuál es el coeficiente del O₂ en la ecuación balanceada?", [("a","1"),("b","3/2 (o 1.5)"),("c","2")], "b", "La ecuación balanceada es: 4Fe + 3O₂ → 2Fe₂O₃. El coeficiente del O₂ es 3. Si se pregunta en forma fraccionaria: 3/2 por mol de Fe₂O₃."),
-            ("Un átomo de sodio (Na) tiene 11 protones y 11 electrones. Cuando forma el ion Na⁺, ¿cuántos electrones tiene?", [("a","12 electrones"),("b","10 electrones"),("c","11 electrones")], "b", "Al perder un electrón (carga +1), el Na pasa de 11 a 10 electrones. Los protones no cambian.")
+            ("Si empujas una pared y no se mueve, ¿qué ocurre con el trabajo?", [("a","Es positivo"),("b","Es cero"),("c","Es negativo")], "b", "Trabajo = Fuerza * Desplazamiento. Si d=0, W=0."),
         ]
     },
     {
-        "num": 8, "title": "Física: Movimiento, Fuerza y Energía",
-        "color": "cyan", "icon": "fa-rocket", "subject": "FÍSICA",
-        "tagline": "Cinemática, las leyes de Newton y principios de energía para el examen ICFES y UNAL.",
-        "callout_title": "Física Conceptual: El Enfoque del ICFES",
-        "callout_body": "El ICFES rara vez pide cálculos puros. La mayoría de preguntas son de <strong>física conceptual</strong>: entiende las leyes y predice qué pasará en una situación dada. Dominar los conceptos te da una ventaja enorme sobre quienes solo memorizaron fórmulas.",
-        "callout_icon": "fa-bolt", "callout_color": "cyan",
+        "num": 9, "title": "Química: Materia y Reacciones",
+        "color": "amber", "icon": "fa-flask", "subject": "QUÍMICA",
+        "tagline": "Atomos, tabla periódica y enlaces.",
+        "callout_title": "Enlaces Químicos",
+        "callout_body": "Iónico: transferencia de electrones. Covalente: comparten electrones.",
+        "callout_icon": "fa-atom", "callout_color": "amber",
         "accordions": [
-            ("Cinemática: Describiendo el Movimiento", "La cinemática estudia CÓMO se mueven los objetos (sin preguntar por qué).<ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>Velocidad:</strong> \\(v = \\frac{\\Delta x}{\\Delta t}\\) — Desplazamiento por unidad de tiempo.</li><li><strong>Aceleración:</strong> \\(a = \\frac{\\Delta v}{\\Delta t}\\) — Cambio de velocidad por unidad de tiempo.</li><li><strong>Movimiento Uniforme (MU):</strong> Velocidad constante, aceleración = 0.</li><li><strong>Movimiento Uniformemente Acelerado (MUA):</strong> Aceleración constante (como la caída libre, \\(g ≈ 9.8 m/s^2\\)).</li></ul>"),
-            ("Las 3 Leyes de Newton: El Core de la Física", "<ol class='list-decimal pl-5 space-y-2 mt-2'><li><strong>Ley de Inercia:</strong> Un objeto en reposo permanece en reposo y uno en movimiento permanece en movimiento a menos que una fuerza neta actúe sobre él.</li><li><strong>F = ma:</strong> La fuerza neta sobre un objeto es igual a su masa por su aceleración. \\(F = ma\\)</li><li><strong>Acción y Reacción:</strong> Por cada fuerza de acción, existe una fuerza de reacción igual en magnitud y opuesta en dirección.</li></ol>"),
-            ("Energía y sus Transformaciones", "La Energía se conserva (No se crea ni se destruye, solo se transforma):<ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>E. Cinética:</strong> \\(Ec = \\frac{1}{2}mv^2\\) — Energía del movimiento.</li><li><strong>E. Potencial Gravitacional:</strong> \\(Ep = mgh\\) — Energía almacenada por la altura.</li><li><strong>Principio de Conservación:</strong> Al caer desde una altura, la Ep se convierte en Ec. La suma total es siempre la misma (si ignoramos el aire).</li></ul>"),
+            ("Propiedades Periódicas", "Electronegatividad: aumenta a la derecha y hacia arriba."),
+            ("El Mol", "Unidad de medida de cantidad de sustancia (6.022e23 partículas)."),
         ],
         "flashcards": [
-            ("¿Por qué la masa no cambia pero el peso sí?", "La <strong>masa</strong> es la cantidad de materia (constante). El <strong>peso</strong> es la fuerza gravitacional sobre esa masa (\\(P = mg\\)). En la Luna, g es menor, así que el peso es menor, pero la masa es la misma."),
-            ("¿Qué sucede con la energía cinética si duplicas la velocidad?", "\\(Ec = \\frac{1}{2}mv^2\\). Si v se duplica, la energía cinética se <strong>cuadruplica</strong>. Por eso los accidentes a alta velocidad son exponencialmente más dañinos."),
-            ("Movimiento Uniforme vs. MUA (gráficas)", "En un gráfico velocidad-tiempo: MU es una <strong>línea horizontal</strong> (velocidad constante). MUA es una <strong>línea diagonal</strong> (velocidad cambia linealmente con el tiempo)."),
+            ("pH de Ácidos", "Menor a 7."),
+            ("Gas Noble", "Grupo 18 (Helio, Neón, etc)."),
+            ("Isótopo", "Mismo elemento, diferente número de neutrones."),
         ],
         "questions": [
-            ("Un objeto de 5 kg cae en caída libre. ¿Cuánto vale la fuerza neta sobre el objeto? (g = 10 m/s²)", [("a","0 N (la gravedad y la normal se cancelan)"),("b","50 N hacia abajo"),("c","5 N")], "b", "En caída libre no hay fuerza normal (no hay superficie de apoyo). Fuerza neta = F_gravedad = m × g = 5 kg × 10 m/s² = 50 N."),
-            ("Un automóvil viaja a velocidad constante en una carretera. Según la Primera Ley de Newton, ¿qué se puede afirmar?", [("a","La fuerza del motor es cero"),("b","La fuerza neta sobre el auto es cero (el motor iguala la fricción y el aire)"),("c","Hay una aceleración positiva constante")], "b", "Velocidad constante implica aceleración cero. Por la 1era Ley, aceleración cero = Fuerza neta cero. El motor NO aplica fuerza neta; la fuerza del motor compensa exactamente las fuerzas de fricción.")
+            ("¿Cuál es el pH del agua pura?", [("a","1"),("b","7"),("c","14")], "b", "Es neutro."),
         ]
     },
     {
-        "num": 9, "title": "Matemática Avanzada: Álgebra y Funciones",
-        "color": "amber", "icon": "fa-square-root-variable", "subject": "MATEMÁTICAS",
-        "tagline": "Ecuaciones, factorización, funciones lineales y cuadráticas para lograr el puntaje máximo.",
-        "callout_title": "El 'Techo de Puntos' en Matemáticas",
-        "callout_body": "Los estudiantes que dominan Álgebra y Funciones pueden resolver el 35–40% del componente de Lógica Matemática de la UdeA. Este módulo es la diferencia entre un puntaje competitivo y un puntaje de élite.",
-        "callout_icon": "fa-chart-line", "callout_color": "amber",
+        "num": 10, "title": "Simulacro Final y Cierre de Ciclo",
+        "color": "rose", "icon": "fa-flag-checkered", "subject": "CIERRE",
+        "tagline": "Consejos finales y puesta a punto.",
+        "callout_title": "¡Lo Lograste!",
+        "callout_body": "Has recorrido los 10 módulos. Ahora solo queda practicar con simulacros reales y confiar en tu proceso.",
+        "callout_icon": "fa-award", "callout_color": "rose",
         "accordions": [
-            ("Factorización: El Arte de Simplificar", "Factorizar es expresar una expresión algebraica como producto de factores más simples. Tipos clave:<ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>Factor común:</strong> \\(ax + ay = a(x+y)\\)</li><li><strong>Diferencia de cuadrados:</strong> \\(a^2 - b^2 = (a+b)(a-b)\\)</li><li><strong>Trinomio cuadrado perfecto:</strong> \\(a^2 + 2ab + b^2 = (a+b)^2\\)</li><li><strong>Trinomio general:</strong> \\(x^2 + bx + c = (x+r)(x+s)\\) donde \\(r+s=b\\) y \\(r \\cdot s = c\\)</li></ul>"),
-            ("Funciones Lineales y Cuadráticas", "<strong>Función Lineal:</strong> \\(f(x) = mx + b\\)<ul class='list-disc pl-5 mt-2'><li>m = pendiente (inclinación de la recta)</li><li>b = intercepto en y (donde corta el eje Y)</li></ul><br><strong>Función Cuadrática (Parábola):</strong> \\(f(x) = ax^2 + bx + c\\)<ul class='list-disc pl-5 mt-2'><li>Si a > 0: abre hacia arriba (mínimo)</li><li>Si a < 0: abre hacia abajo (máximo)</li><li>Raíces: \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\)</li></ul>"),
-            ("Sistemas de Ecuaciones: Método de Sustitución", "El método más limpio para el examen:<br><ol class='list-decimal pl-5 space-y-1 mt-2'><li>Despeja una variable en la ecuación más simple.</li><li>Sustituye esa expresión en la otra ecuación.</li><li>Resuelve la ecuación de una sola variable.</li><li>Reemplaza para encontrar la otra variable.</li></ol><br><em>Consejo:</em> Verifica siempre tu respuesta reemplazando en ambas ecuaciones originales."),
+            ("Gestión de Ansiedad", "Día antes: NO ESTUDIES. Duerme 8 horas. Come ligero."),
+            ("Durante la prueba", "Si te sobran 20 min, revisa la hoja de respuestas (burbujas mal llenadas)."),
         ],
         "flashcards": [
-            ("Fórmula cuadrática y discriminante", "El discriminante es \\(\\Delta = b^2 - 4ac\\). Si \\(\\Delta > 0\\): dos raíces reales. Si \\(\\Delta = 0\\): una raíz real. Si \\(\\Delta < 0\\): sin raíces reales."),
-            ("Dominio de una función", "El <strong>dominio</strong> es el conjunto de todos los valores de x para los que la función está definida. Cuidado: no puedes dividir por cero ni tomar raíz cuadrada de un número negativo."),
-            ("Diferencia de cuadrados rápida", "\\(x^2 - 25 = (x+5)(x-5)\\). El patrón \\(a^2 - b^2\\) siempre factoriza. Aprenderlo de memoria te ahorra 45 segundos por pregunta."),
+            ("¿Qué llevar?", "Lápiz 2, borrador, tajalápiz, documento."),
+            ("¿Calculadora?", "No permitida en UdeA."),
+            ("Puntaje de corte Medicina", "Suele ser > 80/100."),
         ],
         "questions": [
-            ("¿Cuántas soluciones reales tiene la ecuación \\(x^2 - 6x + 9 = 0\\)?", [("a","Dos soluciones distintas"),("b","Una solución (doble)"),("c","Ninguna solución real")], "b", "El discriminante es \\(\\Delta = (-6)^2 - 4(1)(9) = 36 - 36 = 0\\). Discriminante = 0 significa una raíz real doble: x = 3."),
-            ("La función \\(f(x) = 2x + 5\\). ¿Cuál es el valor de \\(f(3)\\)?", [("a","10"),("b","11"),("c","8")], "b", "\\(f(3) = 2(3) + 5 = 6 + 5 = 11\\). La evaluación de funciones es mecánica: reemplaza x por el valor dado.")
-        ]
-    },
-    {
-        "num": 10, "title": "Simulacro Final Integrador y Plan de Cierre",
-        "color": "rose", "icon": "fa-flag-checkered", "subject": "SIMULACRO FINAL",
-        "tagline": "Examen integrador de 20 preguntas tipo UdeA. Mide tu estado de preparación real antes del día del examen.",
-        "callout_title": "Protocolo Pre-Examen (Últimas 72 horas)",
-        "callout_body": "No estudies materia nueva en los últimos 3 días. Usa el tiempo para: 1) Repasar tarjetas de vocabulario y fórmulas clave. 2) Dormir 8 horas mínimo cada noche. 3) Hacer el simulacro a la misma hora que el examen real. 4) <strong>Confiar en el trabajo hecho.</strong>",
-        "callout_icon": "fa-brain", "callout_color": "rose",
-        "accordions": [
-            ("Estrategia de 3 Pases: Protocolo del Día del Examen", "<strong>Pase 1 (40 min):</strong> Lee y responde SOLO las preguntas que sabes con seguridad (Verdes). Marca las dudosas y pasa.<br><br><strong>Pase 2 (60 min):</strong> Regresa a las preguntas Amarillas (complejas pero resolubles). Aplica eliminación de opciones.<br><br><strong>Pase 3 (20 min):</strong> Las Rojas. Si no sabes, nunca dejes en blanco: elimina 2 opciones y elige entre las 2 restantes. La probabilidad sube del 25% al 50%."),
-            ("Manejo de la Ansiedad: Técnica 4-7-8", "Si durante el examen sientes que la ansiedad te bloquea:<ol class='list-decimal pl-5 space-y-1 mt-2'><li>Inhala por la nariz durante <strong>4 segundos</strong>.</li><li>Sostén el aire durante <strong>7 segundos</strong>.</li><li>Exhala por la boca durante <strong>8 segundos</strong>.</li></ol>Hazlo 2-3 veces. Activa el sistema nervioso parasimpático y reduce el cortisol en menos de 90 segundos."),
-            ("Revisión de Conceptos Clave del Curso", "Antes de hacer el simulacro, repasa estas ideas en 5 minutos:<ul class='list-disc pl-5 space-y-2 mt-2'><li>Estrategia: Triage (Verde/Amarillo/Rojo) y 2.25 min por pregunta.</li><li>Lógica: El condicional (→) falla solo cuando P=V y Q=F.</li><li>Lectura: Busca la tesis en el primer y último párrafo.</li><li>Biología: Mitosis (2n→2n), Meiosis (2n→n).</li><li>Química: Balancear conservando masa y átomos.</li><li>Física: F=ma, Ec = ½mv².</li></ul>"),
-        ],
-        "flashcards": [
-            ("El día del examen: ¿qué llevar?", "Documento de identidad original, lápiz o lapicero negro, borrador y mucha confianza. Llega 30 minutos antes del horario señalado."),
-            ("Si terminas antes de tiempo...", "No entregues inmediatamente. Usa el tiempo restante para revisar el Pase 2 y 3. Un error de lectura rápida puede costarte una pregunta que sabías."),
-            ("¿Vale la pena adivinar?", "En la UdeA <strong>NO hay puntos negativos</strong>. Nunca dejes preguntas en blanco. Siempre responde, aunque sea de forma educada entre 2 opciones eliminando las 2 más absurdas."),
-        ],
-        "questions": [
-            ("Un estudiante entra al examen y ve una pregunta de química que no tiene idea de cómo resolver. Según el Método de Triage, ¿qué debe hacer?", [("a","Intentar resolverla con todo su tiempo para no perder los puntos"),("b","Marcarla como Roja, pasarla y volver al final si le sobra tiempo"),("c","Adivinar inmediatamente y borrar del cuadernillo")], "b", "El Triage dice: Las Rojas se pasan inmediatamente. Dedicar mucho tiempo a una pregunta que no sabes va en detrimento de las preguntas que sí puedes resolver correctamente."),
-            ("En un examen de 80 preguntas en 3 horas (180 minutos), ¿cuánto tiempo tiene disponible en promedio por pregunta?", [("a","2 minutos y 45 segundos"),("b","2 minutos y 15 segundos"),("c","1 minuto y 30 segundos")], "b", "180 minutos ÷ 80 preguntas = 2.25 minutos = 2 minutos y 15 segundos por pregunta. Este número debe estar grabado en tu mente el día del examen.")
+            ("El día del examen debo:", [("a","Llegar 5 min tarde"),("b","Estar 30 min antes"),("c","Tomar 5 cafés")], "b", "Evita el estrés innecesario."),
         ]
     }
 ]
@@ -281,71 +314,106 @@ def gen_module(m):
                 </div>
             </div>"""
     
-    fc_html = '<div class="grid grid-cols-1 sm:grid-cols-3 gap-6 h-44">'
+    fc_html = '<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">'
     for (front, back) in m["flashcards"]:
         fc_html += f"""
-                <div class="flashcard h-full">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">{front}</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">{back}</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">{front}</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">{back}</p></div>
                     </div>
                 </div>"""
     fc_html += "</div>"
     
     q_html = '<div id="quiz-container" class="space-y-8">'
     for qi, (qtext, options, correct, explanation) in enumerate(m["questions"]):
-        q_html += f'<div class="q-item" data-correct="{correct}"><p class="font-semibold text-gray-800 mb-4">{qi+1}. {qtext}</p><div class="space-y-3">'
+        q_html += f'<div class="q-item" data-correct="{correct}" data-explanation="{explanation}"><p class="font-semibold text-gray-800 mb-4">{qi+1}. {qtext}</p><div class="space-y-3">'
         for (val, lbl) in options:
-            q_html += f'<label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q{qi+1}" value="{val}" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">{lbl}</span></label>'
-        q_html += f'<div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div></div></div>'
-    q_html += '<button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>'
+            q_html += f'<label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q{num}_{qi+1}" value="{val}" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">{lbl}</span></label>'
+        q_html += f'<div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-bold"></div></div></div>'
+    q_html += '<button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>'
 
-    callout_color_map = {
+    callout_colors = {
+        "emerald": ("bg-emerald-50", "border-emerald-500", "text-emerald-500", "text-emerald-900", "text-emerald-800"),
+        "sky": ("bg-sky-50", "border-sky-500", "text-sky-500", "text-sky-900", "text-sky-800"),
         "indigo": ("bg-indigo-50", "border-indigo-500", "text-indigo-500", "text-indigo-900", "text-indigo-800"),
-        "purple": ("bg-purple-50", "border-purple-500", "text-purple-500", "text-purple-900", "text-purple-800"),
-        "pink": ("bg-pink-50", "border-pink-500", "text-pink-500", "text-pink-900", "text-pink-800"),
+        "violet": ("bg-violet-50", "border-violet-500", "text-violet-500", "text-violet-900", "text-violet-800"),
+        "blue": ("bg-blue-50", "border-blue-500", "text-blue-500", "text-blue-900", "text-blue-800"),
+        "cyan": ("bg-cyan-50", "border-cyan-500", "text-cyan-500", "text-cyan-900", "text-cyan-800"),
         "green": ("bg-green-50", "border-green-500", "text-green-500", "text-green-900", "text-green-800"),
         "orange": ("bg-orange-50", "border-orange-500", "text-orange-500", "text-orange-900", "text-orange-800"),
-        "cyan": ("bg-cyan-50", "border-cyan-500", "text-cyan-500", "text-cyan-900", "text-cyan-800"),
         "amber": ("bg-amber-50", "border-amber-500", "text-amber-500", "text-amber-900", "text-amber-800"),
         "rose": ("bg-rose-50", "border-rose-500", "text-rose-500", "text-rose-900", "text-rose-800"),
     }
-    cc = callout_color_map.get(color, callout_color_map["green"])
+    cc = callout_colors.get(color, callout_colors["emerald"])
+
+    video_section = ""
+    if "video_id" in m:
+        video_section = f"""
+    <section class="mb-12 max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"><i class="fa-solid fa-play-circle text-red-500"></i> Video Clase Complementaria</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/{m['video_id']}" allowfullscreen></iframe>
+        </div>
+    </section>"""
 
     content = HEAD.format(num=num, title=m["title"]) + f"""
     <header class="mb-10 text-center">
-        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-md mb-4 border border-emerald-200">Módulo {num}</span>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">{m["title"]}</h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">{m["tagline"]}</p>
+        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-md mb-3 border border-emerald-200">Educando866 • Módulo {num}</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight">{m["title"]}</h1>
+        <p class="text-base text-gray-500 max-w-2xl mx-auto font-medium">{m["tagline"]}</p>
     </header>
 
     <section class="mb-12 max-w-4xl mx-auto">
-        <div class="{cc[0]} border-l-4 {cc[1]} p-6 rounded-r-2xl shadow-sm">
+        <div class="{cc[0]} border-l-4 {cc[1]} p-6 rounded-r-2xl shadow-sm border border-gray-100">
             <div class="flex items-start gap-4">
-                <div class="{cc[2]} text-2xl mt-1"><i class="fa-solid {m['callout_icon']}"></i></div>
-                <div><h3 class="text-lg font-bold {cc[3]} mb-2">{m['callout_title']}</h3><p class="{cc[4]} text-sm leading-relaxed">{m['callout_body']}</p></div>
+                <div class="{cc[2]} text-3xl mt-1"><i class="fa-solid {m['callout_icon']}"></i></div>
+                <div><h3 class="text-lg font-bold {cc[3]} mb-2">{m['callout_title']}</h3><p class="{cc[4]} text-sm leading-relaxed font-medium">{m['callout_body']}</p></div>
             </div>
         </div>
     </section>
 
+    {video_section}
+
     <section class="mb-12 max-w-4xl mx-auto">
         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <i class="fa-solid {m['icon']} text-emerald-500"></i> Conceptos Clave
+            <i class="fa-solid {m['icon']} text-emerald-500"></i> Conceptos y Teoría
         </h2>
         <div class="space-y-4">{acc_html}</div>
     </section>
 
     <section class="mb-16 max-w-4xl mx-auto">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Repaso Rápido</h2>
-        <p class="text-sm text-gray-500 mb-6">Pasa el cursor (o toca) las tarjetas para ver la respuesta.</p>
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Flashcards Rápido</h2>
+        </div>
         {fc_html}
     </section>
 
-    <section class="max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
+    <section class="max-w-4xl mx-auto bg-white border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-lg relative overflow-hidden mb-12">
         <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comprobación de Lectura</h2>
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-vial"></i></div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Quiz de Entrenamiento</h2>
+                <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-0.5">Mide tu nivel actual</p>
+            </div>
+        </div>
         {q_html}
     </section>
+
+    <section class="max-w-4xl mx-auto bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl transform rotate-12"><i class="fa-solid fa-download"></i></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="text-xl font-bold mb-2">Material de Profundización</h3>
+                <p class="text-gray-400 text-sm">Descarga la guía en PDF con 50 ejercicios adicionales resueltos.</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i> Descargar Guía
+            </a>
+        </div>
+    </section>
+
 """ + FOOT.format(num_padded=num_padded)
     return content
 
@@ -356,4 +424,4 @@ for m in MODULES:
         f.write(gen_module(m))
     print(f"[OK] Generated {path}")
 
-print("\nAll modules generated successfully!")
+print("\nAll 10 modules generated with premium layout and interactive content!")

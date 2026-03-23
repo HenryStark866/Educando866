@@ -1,299 +1,176 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 1: Estrategia UdeA</title>
-    <!-- Tailwind CSS -->
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Estrategia UdeA: El Arte de Ganar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { emerald: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b' } },
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     <style>
-        body { background: transparent; }
-        /* Flashcard Animations */
-        .flashcard { perspective: 1000px; cursor: pointer; }
-        .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); transform-style: preserve-3d; border-radius: 1rem; }
-        .flashcard:hover .flashcard-inner { transform: rotateY(180deg); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
-        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e5e7eb; }
-        .flashcard-front { background-color: #f8fafc; color: #1e293b; }
-        .flashcard-back { background-color: #059669; color: white; transform: rotateY(180deg); border: none; }
-        
-        /* Accordion transition */
-        .accordion-content { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
-        .accordion-active .accordion-content { max-height: 500px; opacity: 1; }
-        .accordion-active .fa-chevron-down { transform: rotate(180deg); }
+        body{background:transparent;font-family:'Poppins',sans-serif;}
+        .acc-content{transition:max-height .35s ease,opacity .35s ease;max-height:0;opacity:0;overflow:hidden;}
+        .acc-open .acc-content{max-height:1000px;opacity:1;}
+        .acc-open .fa-chevron-down{transform:rotate(180deg);}
+        .flashcard{perspective:1000px;cursor:pointer;}
+        .fc-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;border-radius:1rem;}
+        .flashcard:hover .fc-inner{transform:rotateY(180deg);}
+        .fc-front,.fc-back{position:absolute;width:100%;height:100%;-webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:1.25rem;border-radius:1rem;border:1px solid #e5e7eb;}
+        .fc-front{background:#f8fafc;color:#1e293b;}
+        .fc-back{background:#059669;color:white;transform:rotateY(180deg);border:none;}
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="font-sans text-gray-800 antialiased p-4 md:p-8 selection:bg-emerald-500 selection:text-white">
+<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white custom-scrollbar">
 
-    <!-- Header Section -->
     <header class="mb-10 text-center">
-        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-md mb-4 border border-emerald-200">Módulo 1</span>
-        <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Estrategia y Planificación <span class="text-emerald-500">UdeA</span></h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Domina las técnicas de estudio que multiplicarán tu retención y aprende a gestionar el tiempo durante el examen real.</p>
+        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-md mb-3 border border-emerald-200">Educando866 • Módulo 1</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight">Estrategia UdeA: El Arte de Ganar</h1>
+        <p class="text-base text-gray-500 max-w-2xl mx-auto font-medium">Mentalidad de examinado, gestión de tiempo y técnicas de resolución rápida.</p>
     </header>
 
-    <!-- Active Reading Block (Callout) -->
     <section class="mb-12 max-w-4xl mx-auto">
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl shadow-sm">
+        <div class="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-r-2xl shadow-sm border border-gray-100">
             <div class="flex items-start gap-4">
-                <div class="text-blue-500 text-2xl mt-1"><i class="fa-solid fa-circle-info"></i></div>
-                <div>
-                    <h3 class="text-lg font-bold text-blue-900 mb-2">Regla de Oro: La Naturaleza del Examen</h3>
-                    <p class="text-blue-800 text-sm leading-relaxed">
-                        El examen de la Universidad de Antioquia <strong>NO es una prueba de memoria</strong>. Es una prueba de razonamiento bajo presión. Contiene 80 preguntas (40 de Competencia Lectora, 40 de Lógica Matemática) y tienes exactamente 3 horas. Esto significa que dispones de <strong class="bg-blue-200 px-1 rounded">2.25 minutos por pregunta</strong> en promedio.
-                    </p>
-                </div>
+                <div class="text-emerald-500 text-3xl mt-1"><i class="fa-solid fa-star"></i></div>
+                <div><h3 class="text-lg font-bold text-emerald-900 mb-2">La Regla de Oro</h3><p class="text-emerald-800 text-sm leading-relaxed font-medium">El examen UdeA NO es una prueba de memoria. Es una prueba de <strong>razonamiento bajo presión</strong>. Tienes 2.25 min por pregunta. Si te bloqueas, pierdes puntos que podrías ganar en otras 3 preguntas fáciles.</p></div>
             </div>
         </div>
     </section>
 
-    <!-- Interactive Accordions for Methodologies -->
+    
+    <section class="mb-12 max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3"><i class="fa-solid fa-play-circle text-red-500"></i> Video Clase Complementaria</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+    </section>
+
     <section class="mb-12 max-w-4xl mx-auto">
         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-brain text-emerald-500"></i> Metodologías de Alto Rendimiento
+            <i class="fa-solid fa-chess text-emerald-500"></i> Conceptos y Teoría
         </h2>
-        
         <div class="space-y-4">
-            <!-- Accordion 1 -->
-            <div class="accordion-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAccordion(this)">
-                    <span class="font-bold text-gray-800 text-left">Active Recall (Recuperación Activa)</span>
+            <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
+                    <span class="font-bold text-gray-800 text-left">Método de Triage (Verde, Amarillo, Rojo)</span>
                     <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                 </button>
-                <div class="accordion-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">
-                        <p class="mb-3">Leer tus notas repetidamente crea la <strong>"ilusión de competencia"</strong>. Crees que lo sabes porque lo estás mirando.</p>
-                        <p><strong>Cómo aplicarlo:</strong> Después de estudiar un concepto, cierra el cuaderno y oblígate a explicarlo en voz alta de memoria o escríbelo en una hoja en blanco. Este esfuerzo mental es lo que realmente consolida las vías neuronales.</p>
-                    </div>
+                <div class="acc-content bg-gray-50 border-t border-gray-100">
+                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Clasifica preguntas al instante:<br><ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>Verdes (Fáciles):</strong> Resolubles en < 1 min. Hazlas ya.</li><li><strong>Amarillas (Medias):</strong> Sabes cómo, pero toma tiempo. Marca y sigue.</li><li><strong>Rojas (Difíciles):</strong> No tienes idea. Marca y deja para el final.</li></ul></div>
                 </div>
             </div>
-
-            <!-- Accordion 2 -->
-            <div class="accordion-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAccordion(this)">
-                    <span class="font-bold text-gray-800 text-left">Técnica de Feynman</span>
+            <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
+                    <span class="font-bold text-gray-800 text-left">Active Recall vs. Lectura Pasiva</span>
                     <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                 </button>
-                <div class="accordion-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">
-                        <p class="mb-3">Desarrollada por el físico Richard Feynman, se basa en la premisa: <em>"Si no puedes explicárselo a un niño de 6 años, no lo entiendes."</em></p>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Elige un concepto (ej. La fotosíntesis).</li>
-                            <li>Explícalo en voz alta usando lenguaje hiper sencillo, sin jerga.</li>
-                            <li>Si te trabas o usas palabras complejas, ahí tienes una laguna de conocimiento. Regresa a estudiar esa parte específica.</li>
-                        </ul>
-                    </div>
+                <div class="acc-content bg-gray-50 border-t border-gray-100">
+                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Deja de leer y empieza a RECORDAR. Después de cada página, cierra el libro y explica en voz voz lo que aprendiste. Si no puedes, no lo sabes.</div>
                 </div>
-            </div>
-            
-            <!-- Accordion 3 -->
-            <div class="accordion-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAccordion(this)">
-                    <span class="font-bold text-gray-800 text-left">El Método de Triage (Gestión del Examen)</span>
-                    <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div class="accordion-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">
-                        <p class="mb-3">Al igual que en un hospital de emergencias, debes clasificar las preguntas del examen en tres categorías inmediatas:</p>
-                        <ul class="list-decimal pl-5 space-y-2">
-                            <li><strong>Verdes (Fáciles):</strong> Sabes cómo hacerlas y toman poco tiempo. ¡Hazlas de inmediato!</li>
-                            <li><strong>Amarillas (Medias):</strong> Sabes cómo hacerlas, pero requieren cálculos largos o leer detenidamente. Márcalas y hazlas en la segunda ronda.</li>
-                            <li><strong>Rojas (Difíciles):</strong> No tienes idea de cómo abordarlas. Pásalas inmediatamente. Evita el bloqueo mental. Solo vuelve a ellas si te sobra tiempo al final.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </div></div>
     </section>
 
-    <!-- Flashcards Section -->
     <section class="mb-16 max-w-4xl mx-auto">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-            <i class="fa-solid fa-layer-group text-emerald-500"></i> Repaso Rápido (Flashcards)
-        </h2>
-        <p class="text-sm text-gray-500 mb-6">Pasa el ratón (o toca en móvil) sobre las tarjetas para revelar la respuesta.</p>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 h-48">
-            <div class="flashcard h-full">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front shadow-sm">
-                        <h4 class="font-bold text-lg">¿Corte mínimo estimado UdeA Medicina?</h4>
-                    </div>
-                    <div class="flashcard-back shadow-lg">
-                        <p class="text-sm font-medium">Suele estar por encima de <strong>82/100</strong>. No hay margen para errores básicos.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flashcard h-full">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front shadow-sm">
-                        <h4 class="font-bold text-lg">¿Qué área evalúa Lógica?</h4>
-                    </div>
-                    <div class="flashcard-back shadow-lg">
-                        <p class="text-sm font-medium">Proporcionalidad, conteo, geometría básica, secuencias y lógica proposicional.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="flashcard h-full">
-                <div class="flashcard-inner">
-                    <div class="flashcard-front shadow-sm">
-                        <h4 class="font-bold text-lg">Regla de los 2 Minutos</h4>
-                    </div>
-                    <div class="flashcard-back shadow-lg">
-                        <p class="text-sm font-medium">Si llevas más de 120 segundos sin un camino claro de solución, <strong>abandona la pregunta</strong> temporalmente.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Flashcards Rápido</h2>
         </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="flashcard h-44">
+                    <div class="fc-inner">
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">¿Cuántas preguntas tiene el examen UdeA?</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">80 preguntas (40 Lógica, 40 Lectura).</p></div>
+                    </div>
+                </div>
+                <div class="flashcard h-44">
+                    <div class="fc-inner">
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">¿Tiempo total?</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">3 horas exactas (180 minutos).</p></div>
+                    </div>
+                </div>
+                <div class="flashcard h-44">
+                    <div class="fc-inner">
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">¿Hay puntos negativos?</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">No. Debes responder TODAS las preguntas.</p></div>
+                    </div>
+                </div></div>
     </section>
 
-    <!-- Integrated Quiz -->
-    <section class="max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
+    <section class="max-w-4xl mx-auto bg-white border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-lg relative overflow-hidden mb-12">
         <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comprobación de Lectura</h2>
-        
-        <div id="quiz-container" class="space-y-8">
-            <!-- Question 1 -->
-            <div class="quiz-question" data-correct="b">
-                <p class="font-semibold text-gray-800 mb-4">1. Estás en el examen y llegas a una pregunta de geometría que se ve muy compleja de entender a simple vista. Según el Método de Triage, ¿qué debes hacer?</p>
-                <div class="space-y-3">
-                    <label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group">
-                        <input type="radio" name="q1" value="a" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                        <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900">Intentar resolverla hasta encontrar la repuesta cueste lo que cueste.</span>
-                    </label>
-                    <label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group">
-                        <input type="radio" name="q1" value="b" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                        <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900">Clasificarla como Roja, pasarla inmediatamente y volver solo si sobra tiempo al final.</span>
-                    </label>
-                    <label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group">
-                        <input type="radio" name="q1" value="c" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                        <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900">Elegir una respuesta al azar ("C") y no volver a mirarla.</span>
-                    </label>
-                </div>
-                <div class="quiz-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div>
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-vial"></i></div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Quiz de Entrenamiento</h2>
+                <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-0.5">Mide tu nivel actual</p>
             </div>
+        </div>
+        <div id="quiz-container" class="space-y-8"><div class="q-item" data-correct="b" data-explanation="El tiempo es tu recurso más valioso."><p class="font-semibold text-gray-800 mb-4">1. ¿Cuál es la estrategia recomendada si una pregunta de lógica te toma más de 3 minutos?</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1_1" value="a" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">Seguir intentando hasta lograrlo</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1_1" value="b" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">Marcarla como Roja y seguir con las Verdes</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1_1" value="c" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">Llorar brevemente</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-bold"></div></div></div><button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>
+    </section>
 
-            <!-- Question 2 -->
-            <div class="quiz-question" data-correct="c">
-                <p class="font-semibold text-gray-800 mb-4">2. ¿Cuál es la principal falla de leer pasivamente los apuntes?</p>
-                <div class="space-y-3">
-                    <label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group">
-                        <input type="radio" name="q2" value="a" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                        <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900">Consume demasiado tiempo por página leída.</span>
-                    </label>
-                    <label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group">
-                        <input type="radio" name="q2" value="b" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                        <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900">Es aburrido y desmotiva al estudiante.</span>
-                    </label>
-                    <label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group">
-                        <input type="radio" name="q2" value="c" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500">
-                        <span class="ml-3 text-sm text-gray-700 group-hover:text-gray-900">Genera la "ilusión de competencia", haciéndote creer que lo sabes sin haber consolidado la memoria.</span>
-                    </label>
-                </div>
-                <div class="quiz-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div>
+    <section class="max-w-4xl mx-auto bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl transform rotate-12"><i class="fa-solid fa-download"></i></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="text-xl font-bold mb-2">Material de Profundización</h3>
+                <p class="text-gray-400 text-sm">Descarga la guía en PDF con 50 ejercicios adicionales resueltos.</p>
             </div>
-
-            <button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">
-                <i class="fa-solid fa-spell-check"></i> Verificar Respuestas
-            </button>
+            <a href="#" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i> Descargar Guía
+            </a>
         </div>
     </section>
 
-    <!-- Margin to ensure smooth scroll to bottom -->
-    <div class="h-24"></div>
 
+    <div class="h-20"></div>
     <script>
-        // Accordion Logic
-        function toggleAccordion(button) {
-            const item = button.parentElement;
-            const isActive = item.classList.contains('accordion-active');
-            
-            // Close all
-            document.querySelectorAll('.accordion-item').forEach(el => {
-                el.classList.remove('accordion-active');
-                el.querySelector('button').classList.remove('bg-gray-50');
-            });
-
-            // Open clicked if it wasn't open
-            if (!isActive) {
-                item.classList.add('accordion-active');
-                button.classList.add('bg-gray-50');
-            }
+        function toggleAcc(btn){
+            const item=btn.parentElement;
+            const isOpen=item.classList.contains('acc-open');
+            document.querySelectorAll('.acc-item').forEach(el=>el.classList.remove('acc-open'));
+            if(!isOpen) item.classList.add('acc-open');
         }
-
-        // Quiz Logic
-        document.getElementById('submit-quiz').addEventListener('click', () => {
-            const questions = document.querySelectorAll('.quiz-question');
-            let score = 0;
-            let total = questions.length;
-
-            questions.forEach(q => {
-                const correct = q.dataset.correct;
-                const radios = q.querySelectorAll('input[type="radio"]');
-                const feedback = q.querySelector('.quiz-feedback');
-                let answered = false;
-                let userValue = null;
-
-                radios.forEach(radio => {
-                    const label = radio.closest('label');
-                    // Reset styling
-                    label.classList.remove('bg-red-50', 'border-red-300', 'bg-green-50', 'border-green-300');
-                    radio.disabled = true; // Block changes after submit
-
-                    if (radio.checked) {
-                        answered = true;
-                        userValue = radio.value;
-                        if (userValue === correct) {
-                            label.classList.add('bg-green-50', 'border-green-300');
-                            score++;
-                        } else {
-                            label.classList.add('bg-red-50', 'border-red-300');
-                        }
-                    } else if (radio.value === correct) {
-                        // Highlight correct answer if they got it wrong
-                        label.classList.add('bg-green-50', 'border-green-300', 'opacity-60');
+        document.addEventListener('DOMContentLoaded',()=>{
+            const btn=document.getElementById('submit-quiz');
+            if(!btn) return;
+            btn.addEventListener('click',()=>{
+                const qs=document.querySelectorAll('.q-item');
+                let score=0,total=qs.length;
+                qs.forEach(q=>{
+                    const correct=q.dataset.correct;
+                    const radios=q.querySelectorAll('input[type=radio]');
+                    const fb=q.querySelector('.q-feedback');
+                    let answered=false,userVal=null;
+                    radios.forEach(r=>{
+                        const lbl=r.closest('label');
+                        lbl.classList.remove('bg-red-50','border-red-300','bg-green-50','border-green-300');
+                        r.disabled=true;
+                        if(r.checked){answered=true;userVal=r.value;
+                            if(userVal===correct){lbl.classList.add('bg-green-50','border-green-300');score++;}
+                            else lbl.classList.add('bg-red-50','border-red-300');
+                        }else if(r.value===correct) lbl.classList.add('bg-green-50','border-green-300','opacity-60');
+                    });
+                    if(fb){
+                        fb.classList.remove('hidden');
+                        if(!answered) fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-yellow-50 text-yellow-800 border border-yellow-200';
+                        else if(userVal===correct) fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-800 border border-green-200';
+                        else fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-red-50 text-red-800 border border-red-200';
+                        if(!answered) fb.innerHTML='<i class="fa-solid fa-triangle-exclamation mr-2"></i> Sin respuesta.';
+                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto! ' + (q.dataset.explanation || '');
+                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. ' + (q.dataset.explanation || '');
                     }
                 });
-
-                feedback.classList.remove('hidden');
-                if (!answered) {
-                    feedback.className = 'quiz-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-yellow-50 text-yellow-800 border border-yellow-200';
-                    feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2"></i> No respondiste esta pregunta.';
-                } else if (userValue === correct) {
-                    feedback.className = 'quiz-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-800 border border-green-200';
-                    feedback.innerHTML = '<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto! Excelente razonamiento.';
-                } else {
-                    feedback.className = 'quiz-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-red-50 text-red-800 border border-red-200';
-                    feedback.innerHTML = '<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. Revisa el contenido nuevamente.';
+                if(window.parent&&window.parent.progressManager){
+                    const pct=Math.round((score/total)*100);
+                    window.parent.progressManager.saveQuizScore('modulo-01',pct);
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-check mr-2"></i> Puntaje: ${pct}%`;
+                    btn.className='flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-gray-800 text-white font-bold rounded-xl cursor-default';
                 }
             });
-
-            // If embedded in the main app, notify the parent window to save progress
-            if (window.parent && window.parent.progressManager) {
-                const percentage = Math.round((score / total) * 100);
-                window.parent.progressManager.saveQuizScore(`modulo-01`, percentage);
-                
-                const btn = document.getElementById('submit-quiz');
-                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Resultado Guardado (${percentage}%)`;
-                btn.className = "flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-gray-800 text-white font-bold rounded-xl shadow-md cursor-default";
-            } else {
-                 const btn = document.getElementById('submit-quiz');
-                 btn.innerHTML = `Puntaje: ${score}/${total}`;
-            }
         });
     </script>
-</body>
-</html>
+</body></html>

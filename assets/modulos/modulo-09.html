@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 9: Matemática Avanzada: Álgebra y Funciones</title>
+    <title>Módulo 9: Química: Materia y Reacciones</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,7 +10,7 @@
     <style>
         body{background:transparent;font-family:'Poppins',sans-serif;}
         .acc-content{transition:max-height .35s ease,opacity .35s ease;max-height:0;opacity:0;overflow:hidden;}
-        .acc-open .acc-content{max-height:600px;opacity:1;}
+        .acc-open .acc-content{max-height:1000px;opacity:1;}
         .acc-open .fa-chevron-down{transform:rotate(180deg);}
         .flashcard{perspective:1000px;cursor:pointer;}
         .fc-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;border-radius:1rem;}
@@ -18,88 +18,107 @@
         .fc-front,.fc-back{position:absolute;width:100%;height:100%;-webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;padding:1.25rem;border-radius:1rem;border:1px solid #e5e7eb;}
         .fc-front{background:#f8fafc;color:#1e293b;}
         .fc-back{background:#059669;color:white;transform:rotateY(180deg);border:none;}
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white">
+<body class="p-4 md:p-8 selection:bg-emerald-500 selection:text-white custom-scrollbar">
 
     <header class="mb-10 text-center">
-        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest rounded-md mb-4 border border-emerald-200">Módulo 9</span>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">Matemática Avanzada: Álgebra y Funciones</h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Ecuaciones, factorización, funciones lineales y cuadráticas para lograr el puntaje máximo.</p>
+        <span class="inline-block py-1 px-3 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-md mb-3 border border-emerald-200">Educando866 • Módulo 9</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight">Química: Materia y Reacciones</h1>
+        <p class="text-base text-gray-500 max-w-2xl mx-auto font-medium">Atomos, tabla periódica y enlaces.</p>
     </header>
 
     <section class="mb-12 max-w-4xl mx-auto">
-        <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-2xl shadow-sm">
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-2xl shadow-sm border border-gray-100">
             <div class="flex items-start gap-4">
-                <div class="text-amber-500 text-2xl mt-1"><i class="fa-solid fa-chart-line"></i></div>
-                <div><h3 class="text-lg font-bold text-amber-900 mb-2">El 'Techo de Puntos' en Matemáticas</h3><p class="text-amber-800 text-sm leading-relaxed">Los estudiantes que dominan Álgebra y Funciones pueden resolver el 35–40% del componente de Lógica Matemática de la UdeA. Este módulo es la diferencia entre un puntaje competitivo y un puntaje de élite.</p></div>
+                <div class="text-amber-500 text-3xl mt-1"><i class="fa-solid fa-atom"></i></div>
+                <div><h3 class="text-lg font-bold text-amber-900 mb-2">Enlaces Químicos</h3><p class="text-amber-800 text-sm leading-relaxed font-medium">Iónico: transferencia de electrones. Covalente: comparten electrones.</p></div>
             </div>
         </div>
     </section>
 
+    
+
     <section class="mb-12 max-w-4xl mx-auto">
         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-square-root-variable text-emerald-500"></i> Conceptos Clave
+            <i class="fa-solid fa-flask text-emerald-500"></i> Conceptos y Teoría
         </h2>
         <div class="space-y-4">
             <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
-                    <span class="font-bold text-gray-800 text-left">Factorización: El Arte de Simplificar</span>
+                    <span class="font-bold text-gray-800 text-left">Propiedades Periódicas</span>
                     <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                 </button>
                 <div class="acc-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Factorizar es expresar una expresión algebraica como producto de factores más simples. Tipos clave:<ul class='list-disc pl-5 space-y-2 mt-2'><li><strong>Factor común:</strong> \(ax + ay = a(x+y)\)</li><li><strong>Diferencia de cuadrados:</strong> \(a^2 - b^2 = (a+b)(a-b)\)</li><li><strong>Trinomio cuadrado perfecto:</strong> \(a^2 + 2ab + b^2 = (a+b)^2\)</li><li><strong>Trinomio general:</strong> \(x^2 + bx + c = (x+r)(x+s)\) donde \(r+s=b\) y \(r \cdot s = c\)</li></ul></div>
+                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Electronegatividad: aumenta a la derecha y hacia arriba.</div>
                 </div>
             </div>
             <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
-                    <span class="font-bold text-gray-800 text-left">Funciones Lineales y Cuadráticas</span>
+                    <span class="font-bold text-gray-800 text-left">El Mol</span>
                     <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
                 </button>
                 <div class="acc-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed"><strong>Función Lineal:</strong> \(f(x) = mx + b\)<ul class='list-disc pl-5 mt-2'><li>m = pendiente (inclinación de la recta)</li><li>b = intercepto en y (donde corta el eje Y)</li></ul><br><strong>Función Cuadrática (Parábola):</strong> \(f(x) = ax^2 + bx + c\)<ul class='list-disc pl-5 mt-2'><li>Si a > 0: abre hacia arriba (mínimo)</li><li>Si a < 0: abre hacia abajo (máximo)</li><li>Raíces: \( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</li></ul></div>
-                </div>
-            </div>
-            <div class="acc-item bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <button class="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors focus:outline-none" onclick="toggleAcc(this)">
-                    <span class="font-bold text-gray-800 text-left">Sistemas de Ecuaciones: Método de Sustitución</span>
-                    <i class="fa-solid fa-chevron-down text-gray-400 transition-transform duration-300"></i>
-                </button>
-                <div class="acc-content bg-gray-50 border-t border-gray-100">
-                    <div class="p-6 text-gray-600 text-sm leading-relaxed">El método más limpio para el examen:<br><ol class='list-decimal pl-5 space-y-1 mt-2'><li>Despeja una variable en la ecuación más simple.</li><li>Sustituye esa expresión en la otra ecuación.</li><li>Resuelve la ecuación de una sola variable.</li><li>Reemplaza para encontrar la otra variable.</li></ol><br><em>Consejo:</em> Verifica siempre tu respuesta reemplazando en ambas ecuaciones originales.</div>
+                    <div class="p-6 text-gray-600 text-sm leading-relaxed">Unidad de medida de cantidad de sustancia (6.022e23 partículas).</div>
                 </div>
             </div></div>
     </section>
 
     <section class="mb-16 max-w-4xl mx-auto">
-        <h2 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Repaso Rápido</h2>
-        <p class="text-sm text-gray-500 mb-6">Pasa el cursor (o toca) las tarjetas para ver la respuesta.</p>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 h-44">
-                <div class="flashcard h-full">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-3"><i class="fa-solid fa-layer-group text-emerald-500"></i> Flashcards Rápido</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">Fórmula cuadrática y discriminante</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">El discriminante es \(\Delta = b^2 - 4ac\). Si \(\Delta > 0\): dos raíces reales. Si \(\Delta = 0\): una raíz real. Si \(\Delta < 0\): sin raíces reales.</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">pH de Ácidos</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">Menor a 7.</p></div>
                     </div>
                 </div>
-                <div class="flashcard h-full">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">Dominio de una función</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">El <strong>dominio</strong> es el conjunto de todos los valores de x para los que la función está definida. Cuidado: no puedes dividir por cero ni tomar raíz cuadrada de un número negativo.</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">Gas Noble</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">Grupo 18 (Helio, Neón, etc).</p></div>
                     </div>
                 </div>
-                <div class="flashcard h-full">
+                <div class="flashcard h-44">
                     <div class="fc-inner">
-                        <div class="fc-front shadow-sm"><h4 class="font-bold text-base">Diferencia de cuadrados rápida</h4></div>
-                        <div class="fc-back shadow-lg"><p class="text-sm font-medium">\(x^2 - 25 = (x+5)(x-5)\). El patrón \(a^2 - b^2\) siempre factoriza. Aprenderlo de memoria te ahorra 45 segundos por pregunta.</p></div>
+                        <div class="fc-front shadow-sm border-2 border-gray-100"><h4 class="font-bold text-sm leading-tight">Isótopo</h4></div>
+                        <div class="fc-back shadow-lg"><p class="text-xs font-semibold leading-relaxed">Mismo elemento, diferente número de neutrones.</p></div>
                     </div>
                 </div></div>
     </section>
 
-    <section class="max-w-4xl mx-auto bg-gray-50 border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden">
+    <section class="max-w-4xl mx-auto bg-white border border-gray-200 rounded-3xl p-6 sm:p-10 shadow-lg relative overflow-hidden mb-12">
         <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comprobación de Lectura</h2>
-        <div id="quiz-container" class="space-y-8"><div class="q-item" data-correct="b"><p class="font-semibold text-gray-800 mb-4">1. ¿Cuántas soluciones reales tiene la ecuación \(x^2 - 6x + 9 = 0\)?</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1" value="a" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Dos soluciones distintas</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1" value="b" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Una solución (doble)</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q1" value="c" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">Ninguna solución real</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div></div></div><div class="q-item" data-correct="b"><p class="font-semibold text-gray-800 mb-4">2. La función \(f(x) = 2x + 5\). ¿Cuál es el valor de \(f(3)\)?</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q2" value="a" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">10</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q2" value="b" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">11</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q2" value="c" class="w-4 h-4 text-emerald-600 border-gray-300"><span class="ml-3 text-sm text-gray-700">8</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-medium"></div></div></div><button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-inner"><i class="fa-solid fa-vial"></i></div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Quiz de Entrenamiento</h2>
+                <p class="text-xs text-gray-500 font-bold uppercase tracking-widest mt-0.5">Mide tu nivel actual</p>
+            </div>
+        </div>
+        <div id="quiz-container" class="space-y-8"><div class="q-item" data-correct="b" data-explanation="Es neutro."><p class="font-semibold text-gray-800 mb-4">1. ¿Cuál es el pH del agua pura?</p><div class="space-y-3"><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q9_1" value="a" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">1</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q9_1" value="b" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">7</span></label><label class="flex items-center p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-white transition-colors group"><input type="radio" name="q9_1" value="c" class="w-4 h-4 text-emerald-600 border-gray-300 focus:ring-emerald-500"><span class="ml-3 text-sm text-gray-700 font-medium">14</span></label><div class="q-feedback hidden mt-3 p-4 rounded-xl text-sm font-bold"></div></div></div><button id="submit-quiz" class="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95"><i class="fa-solid fa-spell-check"></i> Verificar Respuestas</button></div>
     </section>
+
+    <section class="max-w-4xl mx-auto bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl transform rotate-12"><i class="fa-solid fa-download"></i></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="text-xl font-bold mb-2">Material de Profundización</h3>
+                <p class="text-gray-400 text-sm">Descarga la guía en PDF con 50 ejercicios adicionales resueltos.</p>
+            </div>
+            <a href="#" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95">
+                <i class="fa-solid fa-file-pdf"></i> Descargar Guía
+            </a>
+        </div>
+    </section>
+
 
     <div class="h-20"></div>
     <script>
@@ -135,14 +154,14 @@
                         else if(userVal===correct) fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-green-50 text-green-800 border border-green-200';
                         else fb.className='q-feedback mt-3 p-4 rounded-xl text-sm font-medium bg-red-50 text-red-800 border border-red-200';
                         if(!answered) fb.innerHTML='<i class="fa-solid fa-triangle-exclamation mr-2"></i> Sin respuesta.';
-                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto!';
-                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. Revisa el acordeón correspondiente.';
+                        else if(userVal===correct) fb.innerHTML='<i class="fa-solid fa-check-circle mr-2"></i> ¡Correcto! ' + (q.dataset.explanation || '');
+                        else fb.innerHTML='<i class="fa-solid fa-circle-xmark mr-2"></i> Incorrecto. ' + (q.dataset.explanation || '');
                     }
                 });
                 if(window.parent&&window.parent.progressManager){
                     const pct=Math.round((score/total)*100);
                     window.parent.progressManager.saveQuizScore('modulo-09',pct);
-                    btn.textContent=`Guardado (${pct}%)`;
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-check mr-2"></i> Puntaje: ${pct}%`;
                     btn.className='flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 bg-gray-800 text-white font-bold rounded-xl cursor-default';
                 }
             });
